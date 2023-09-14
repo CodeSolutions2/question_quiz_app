@@ -1,0 +1,6 @@
+git checkout
+1. switch branches
+2. reset the repo
+3. save changes
+4. rien
+1. switch branches

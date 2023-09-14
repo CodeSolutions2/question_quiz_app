@@ -1,0 +1,6 @@
+Let's say we've made a mistake in our latest commit to a public branch. Which of the following commands is the best option for fixing our mistake?
+1. git revert
+2. git commit --amend
+3. git reset
+4. git checkout -- filename
+1. git revert

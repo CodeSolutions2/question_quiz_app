@@ -1,0 +1,6 @@
+What command lets you create a connection between a local and remote repository?
+1. git remote add new URL ou git remote add origin
+2. git remote new
+3. git remote new origin
+4. git remote origin
+1. git remote add new URL ou git remote add origin

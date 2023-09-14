@@ -1,0 +1,6 @@
+Your current project has several branches; master, beta, and push-notifications. You’ve just finished the notification feature in the push-notification branch, and you want to commit it to beta branch. How can you accomplish this?
+1. Checkout the push-notifications branch and run git merge beta
+2. Checkout the master branch and run git merge beta -> push-notification
+3. Delete the push-notification branch and it will be committed to the master branch automatically
+4. Checkout the beta branch and run git merge push-notification
+4. Checkout the beta branch and run git merge push-notification

@@ -1,0 +1,6 @@
+What will the following command print to the Terminal? git remote -v
+1. A list of remote repositories and their URLs
+2. The current git version you’re running
+3. An inline editor for modifying remote repositories
+4. The last 5 git versions you’ve installed
+1. A list of remote repositories and their URLs

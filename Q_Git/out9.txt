@@ -1,0 +1,6 @@
+What does the following command do to the git repository? git reset –soft HEAD^
+1. It deletes all previous commits and reset the repository history back to its initial state.
+2. It resets the working branch to the first commit.
+3. It keeps the HEAD at the current commit, but clears all previous commits.
+4. It sets HEAD to the previous commit and leaves changes from the undone commit in the stage/index.
+4. It sets HEAD to the previous commit and leaves changes from the undone commit in the stage/index.

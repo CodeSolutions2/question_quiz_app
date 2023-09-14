@@ -1,0 +1,6 @@
+Which of the following is true when you use the following command? git add -A
+1. All new and updated files are staged
+2. Files are staged in alphabetical order.
+3. All new files are staged
+4. Only updated files are staged
+1. All new and updated files are staged

@@ -1,0 +1,6 @@
+Describe what the following git commands do to the commit history. git reset –hard HEAD~5; git merge –squash HEAD@{1}
+1. Reset the HEAD to the 5th commit in the repo, then merges to the master branch
+2. Reset the commit branch back before the last 5 commits, then squashes them into a single commit
+3. Delete the last 5 commits
+4. Merges the last 5 commits into a new branch
+2. Reset the commit branch back before the last 5 commits, then squashes them into a single commit
