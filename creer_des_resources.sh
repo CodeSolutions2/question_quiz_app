@@ -24,11 +24,24 @@ gcloud storage ls
 # -------------------
 
 # Create data files inside Q_Git
+!mkdir Q_Git
+
+!echo 'How can you check your current git version?|1. git –v|2. git --version|3. git –option|4. git –current|2. git --version' | tr "|" '\n' > test0.txt
+
+What command lets you create a connection between a local and remote repository?
+1. git remote add new URL ou git remote add origin
+2. git remote new
+3. git remote new origin
+4. git remote origin
+1. git remote add new URL ou git remote add origin
+
 !echo 'git checkout|1. switch branches|2. reset the repo|3. save changes|4. nothing|1. switch branches' | tr "|" '\n' > test2.txt
 
 !echo "Let's say we've made a mistake in our latest commit to a public branch. Which of the following commands is the best option for fixing our mistake?|1. git revert|2. git commit --amend|3. git reset|4. git checkout -- filename|1. git revert" | tr "|" '\n' > test3.txt
 
 !echo 'Which of the following is true when you use the following command? git add -A|1. All new and updated files are staged|2. Files are staged in alphabetical order|3. All new files are staged|4. Only updated files are staged|1. All new and updated files are staged' | tr "|" '\n' > test4.txt
+
+!mv test0.txt Q_Git/
 
 # -------------------
 
