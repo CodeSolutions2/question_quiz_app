@@ -1,4 +1,4 @@
-Q1. How can you check your current git version?
+How can you check your current git version?
 1. git –v
 2. git --version
 3. git –option
