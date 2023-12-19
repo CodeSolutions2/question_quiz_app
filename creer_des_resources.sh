@@ -1,5 +1,261 @@
 #!/bin/bash
 
+
+# -------------------
+
+export PROJECT_ID=$(echo "fit-union-378020")
+
+export LOCATION=$(echo "europe-west9")
+gcloud config set project $PROJECT_ID
+
+export BUCKET_NAME=$(echo "question-quiz-data-examples")
+export STORAGE_CLASS=STANDARD   # STANDARD, NEARLINE, COLDLINE, ARCHIVE
+
+# -------------------
+
+gcloud storage buckets create gs://$BUCKET_NAME --project=$PROJECT_ID --default-storage-class=STANDARD --location=$LOCATION --uniform-bucket-level-access
+
+# -------------------
+
+# List storage
+# https://cloud.google.com/storage/docs/listing-objects
+gcloud storage ls
+
+# -------------------
+
+# Create data files inside Q_Git
+!echo 'git checkout|1. switch branches|2. reset the repo|3. save changes|4. nothing|1. switch branches' | tr "|" '\n' > test2.txt
+
+!echo "Let's say we've made a mistake in our latest commit to a public branch. Which of the following commands is the best option for fixing our mistake?|1. git revert|2. git commit --amend|3. git reset|4. git checkout -- filename|1. git revert" | tr "|" '\n' > test3.txt
+
+!echo 'Which of the following is true when you use the following command? git add -A|1. All new and updated files are staged|2. Files are staged in alphabetical order|3. All new files are staged|4. Only updated files are staged|1. All new and updated files are staged' | tr "|" '\n' > test4.txt
+
+# -------------------
+
+
+# Upload a data folder to a bucket
+gcloud storage cp --recursive /home/j622amilah/Q_Git/ gs://$BUCKET_NAME/
+
+
+# List the contents of a storage buckets
+gcloud storage ls --recursive gs://$BUCKET_NAME/**
+
+# ---------------------------------------------
+
+# Make the bucket public for anyone to download
+
+# Make all objects in a bucket publicly readable
+# https://cloud.google.com/storage/docs/access-control/making-data-public#permissions-cli
+gcloud storage buckets add-iam-policy-binding gs://$BUCKET_NAME --member=allUsers --role=roles/storage.objectViewer
+
+# ---------------------------------------------
+
+# Log into GCP on Kaggle
+
+gcloud auth login --cred-file=key.json
+
+# ---------------------------------------------
+
+# gcloud storage cp --recursive gs://BUCKET_NAME/OBJECT_NAME SAVE_TO_LOCATION
+
+# ---------------------------------------------
+# Testing the program
+# ---------------------------------------------
+
+cat > run.py <<EOF
+import os
+from os import environ
+
+import numpy as np
+
+import PySimpleGUI as sg
+
+from time import sleep
+
+from fuzzywuzzy import fuzz
+from fuzzywuzzy import process
+
+import pandas as pd
+pd.set_option('display.max_colwidth', 0)
+
+
+sg.theme("reddit")
+
+fpath = "/kaggle/working/Q_Git/"
+listes_de_fichiers = os.listdir(fpath)
+
+# ----------------------------------
+# Parse the file names
+tmp = sorted(listes_de_fichiers)
+replace_le = ['test', '.txt']
+replace_avec = ['', '']
+
+tmp1 = []
+for nom in tmp:
+    for ind, i in enumerate(replace_le):
+        nom = nom.replace(i, replace_avec[ind])
+    tmp1.append(int(nom))
+ordd = np.argsort(tmp1)
+
+listes_de_fichiers_sort = [tmp[i] for i in ordd]
+listes_de_fichiers_sort
+# ----------------------------------
+
+def clean_text(textout):
+    to_replace = [";", '\n', '</p>', '<a', 'id=', "href=", 'title=', 'class=', '</a>', 
+                  '</sup>', '<p>', '</b>', '<sup', '>', '<', '\\']
+    replace_with = ''
+
+    for ind, tr in enumerate(to_replace):
+        textout = [i.replace(tr, replace_with) for i in textout]
+    return textout
+    
+# ----------------------------------
+cnt = 0
+SCORE = 0
+noms = ['QUESTION', 'REPONSE0', 'REPONSE1', 'REPONSE2', 'REPONSE3', 'ANSWER']
+myres = 0
+
+for ind, nom_de_fichier in enumerate(listes_de_fichiers_sort):
+    
+    # ----------------------------------
+    # Lire des fichiers de mon PC
+    # ----------------------------------
+    filepath = os.path.join(fpath, nom_de_fichier)
+
+    out = []
+    with open(filepath, 'r') as reader:
+        out.append(reader.read())
+    out = out[0].split('\n')
+    out = [i for i in out if any(i)]
+    # ----------------------------------
+    
+    d = dict(zip(noms, out))
+    
+    if ind == len(listes_de_fichiers)-1:
+        layout = [[sg.Text(f'Current SCORE: {SCORE}')], 
+                  [sg.Text(d['QUESTION'])]]
+    else:
+        layout = [[sg.Text(f'Q{ind}, MY Current SCORE: {SCORE}')],
+                  [sg.Multiline(d['QUESTION'], size=(40,10))],
+              [sg.Button(d['REPONSE0'])],  
+              [sg.Button(d['REPONSE1'])],
+              [sg.Button(d['REPONSE2'])],
+              [sg.Button(d['REPONSE3'])]]
+    
+    # Create the window
+    window = sg.Window("DataLogger", layout, margins=(200, 200))
+    
+    event, values = window.read()
+    
+    if event == d['REPONSE0'] and d['ANSWER'] == d['REPONSE0']:  
+        cnt = cnt + 1
+        myres = d['REPONSE0']
+    if event == d['REPONSE1'] and d['ANSWER'] == d['REPONSE1']:
+        cnt = cnt + 1
+        myres = d['REPONSE1']
+    if event == d['REPONSE2'] and d['ANSWER'] == d['REPONSE2']:
+        cnt = cnt + 1
+        myres = d['REPONSE2']
+    if event == d['REPONSE3'] and d['ANSWER'] == d['REPONSE3']:
+        cnt = cnt + 1
+        myres = d['REPONSE3']
+        
+    SCORE = cnt/(ind+1) * 100
+    
+    print('myres: ', myres)
+    print('ANSWER: ', d['ANSWER'])
+    print('---------------------------------------')
+    
+    if myres == 0:
+        f = open("resultants.txt", "a")
+        f.write(f"{d['QUESTION']}\n{myres}\n{d['ANSWER']}")
+        f.write("\n\n")
+        f.close()
+        
+    myres = 0
+    window.close()
+
+
+sleep(1)  # Wait 10 second
+window.close()
+# ----------------------------------
+	EOF
+
+
+# Installation:
+
+# A. Check computer/Virtual Machine operating system
+cat /etc/*-release
+PRETTY_NAME="Debian GNU/Linux 11 (bullseye)"
+NAME="Debian GNU/Linux"
+VERSION_ID="11"
+VERSION="11 (bullseye)"
+VERSION_CODENAME=bullseye
+ID=debian
+HOME_URL="https://www.debian.org/"
+SUPPORT_URL="https://www.debian.org/support"
+BUG_REPORT_URL="https://bugs.debian.org/"
+
+# B. version of python
+# Type python --version OR python --v
+# OR
+# Go to /usr/lib and find the most recent version of python
+
+# 0. Tinker for the OS
+Ubuntu, Debian, other distros with Apt:
+sudo apt-get install python3-tk
+sudo apt-get remove python3-tk
+
+Fedora:
+sudo dnf install python3-tkinter
+
+# OpenSUSE
+sudo zypper install python39-tk  # to use tkinter for PySimpleGUI
+
+# 1. python installations
+sudo python3.9 -m pip install pysimplegui
+sudo python3.9 -m pip install pandas
+sudo python3.9 -m pip install fuzzywuzzy
+sudo python3.9 -m pip install numpy
+
+# 2. Run the program
+python3 run.py
+
+# 3. Clean up
+sudo apt-get remove python3-tk
+sudo python3.9 -m pip install pysimplegui
+sudo python3.9 -m pip uninstall pandas
+sudo python3.9 -m pip uninstall fuzzywuzzy
+sudo python3.9 -m pip uninstall numpy
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # ./creer_des_resources.sh
 # ./nettoyer_des_resources.sh 
 
