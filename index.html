@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head></head>
+    
+<body>
+    <div id="btns" class="buttonContainer">
+        <button id="btn1" class="buttonClass"></button>
+        <button id="btn2" class="buttonClass"></button>
+        <button id="btn3" class="buttonClass"></button>
+        <button id="btn4" class="buttonClass"></button>
+    </div>
+<button id="load_a_test" onclick="load_a_test"></button>
+  
+<div id="notification"></div>
+<div id="error"></div>
+
+<!-- --------------------------------------------------- -->
+
+<!-- CSS -->
+<style>
+div { padding: 10px; display:block; font-family:courier; font-size:15px; height:300px; }
+div#notification { position: relative; color: #3236a8; }
+div#error { position: relative; color: #bd1f17; }
+
+.buttonContainer { width: 75%; display: flex; flex-direction: row; justify-content: flex-start; flex-wrap: wrap; }
+.buttonContainer > .buttonClass { width: 100px; height: 48px; font-size: 12px; text-wrap: wrap; }
+</style>
+	
+<!-- --------------------------------------------------- -->
+  
+<script>
+
+// Force the page to refresh the cached webpage
+window.addEventListener('beforeunload', function() {
+ 	window.location.href = window.location.href + '?nocache=' + new Date().getTime();
+});
+
+// ----------------------------------------------------
+
+async function load_a_test() {
+
+  const foldername = "Q_Git"
+  
+  // btn.innerText = count;
+
+  await GET_fileDownloadUrl_and_sha_for_a_folder(desired_foldername, repo_name, repoOwner)
+}
+
+// ----------------------------------------------------
+
+async function GET_fileDownloadUrl_and_sha_for_a_folder(desired_foldername, repo_name, repoOwner) {
+
+  // Returns an object of values that are an array
+	var url = `https://api.github.com/repos/${repoOwner}/${repo_name}/${desired_foldername}/contents`;
+	// console.log('url: ', url);
+
+	var data = await fetch(url).then(res => res.json());
+	console.log('data: ', data);
+
+  
+
+}
+  
+
+  
+async function GET_repo_file_info_RESTAPI_fast(foldername, filename) {
+	return await fetch(`https://raw.githubusercontent.com/CodeSolutions2/question_quiz_app/main/${foldername}/${filename}`)
+		.then(res => res.text())
+		.then(async function (text_out) { return  text_out; })
+		.catch(error => { console.log(error); });
+}
+
+
+</script>
+</body>
+</html>
