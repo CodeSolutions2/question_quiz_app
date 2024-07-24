@@ -35,15 +35,18 @@ window.addEventListener('beforeunload', function() {
  	window.location.href = window.location.href + '?nocache=' + new Date().getTime();
 });
 
+
+// btn.innerText = count;
+	
 // ----------------------------------------------------
 
 async function load_a_test() {
-
-  const foldername = "Q_Git"
-  
-  // btn.innerText = count;
-
-  await GET_fileDownloadUrl_and_sha_for_a_folder(desired_foldername, repo_name, repoOwner)
+	
+	const foldername = "Q_Git";
+	const repo_name = "question_quiz_app";
+	const repoOwner = "CodeSolutions2";
+	
+	await GET_fileDownloadUrl_and_sha_for_a_folder(foldername, repo_name, repoOwner)
 }
 
 // ----------------------------------------------------
