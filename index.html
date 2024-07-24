@@ -9,7 +9,8 @@
         <button id="btn2" class="buttonClass">Question 2</button>
         <button id="btn3" class="buttonClass">Question 3</button>
     </div>
-	
+
+<button id="Start" onclick="Start" style="display:block;">Start</button>
 <button id="load_a_test" onclick="load_a_test" style="display:block;">Load a test</button>
   
 <div id="notification"></div>
@@ -48,23 +49,32 @@ const branchName = "main";
 
 // ----------------------------------------------------
 
-// Initially load the questions from the repository
-const file_obj = GET_fileobjects_for_a_folder(foldername, repo_name, repoOwner, branchName)
-	.then(res => res)
-	.then(async function(obj) { return obj; });
-console.log('file_obj: ', file_obj);
-
-var x = Array.from({ length: file_obj.length }, (_, ind) => ind);
-console.log('x: ', x);
+async function processEvent_initialize(event) {
 	
-var x_rand = rand_perm(x);
-console.log('x_rand: ', x_rand);
+	// Initially load the questions from the repository
+	const file_obj = await GET_fileobjects_for_a_folder(foldername, repo_name, repoOwner, branchName)
+	console.log('file_obj: ', file_obj);
+
+	var x = await Array.from({ length: file_obj.length }, (_, ind) => ind);
+	console.log('x: ', x);
+		
+	var x_rand = await rand_perm(x);
+	console.log('x_rand: ', x_rand);
+
+	// await processEvent_load_a_test();
+}
 
 // ----------------------------------------------------
-	
-document.getElementById("load_a_test").addEventListener("click", async () => {
 
-	console.log('button clicked');
+document.getElementById("Start").addEventListener("click", processEvent_initialize, false);
+	
+document.getElementById("load_a_test").addEventListener("click", processEvent_load_a_test, false);
+
+// document.getElementById("select_an_answer").addEventListener("click", processEvent_load_a_test, false);
+// ----------------------------------------------------
+
+						
+async function processEvent_load_a_test(event) {
 
 	if (x_rand.length > 0) {
 		var text = await GET_repo_file_info_RESTAPI_fast(repoOwner, repo_name, branchName, foldername, file_obj[x_rand.shift()].name);
@@ -87,7 +97,7 @@ document.getElementById("load_a_test").addEventListener("click", async () => {
 		 A = A.filter(NonEmptyVals_toKeep).at(0);
 		console.log('A: ', A);
 	} else {
-		document.getElementById("notification").innerHTML = "All questions have been used. Please push Restart to restart."
+		document.getElementById("notification").innerHTML = "All questions have been used. Please push Start to restart."
 	}
 	
 });
@@ -97,10 +107,10 @@ document.getElementById("load_a_test").addEventListener("click", async () => {
 
 // ----------------------------------------------------
 
-function GET_fileobjects_for_a_folder(repoOwner, repo_name, foldername, branchName) {
+async function GET_fileobjects_for_a_folder(repoOwner, repo_name, foldername, branchName) {
 
 	// Using url
-	return fetch(`https://api.github.com/repos/${repoOwner}/${repo_name}/contents/${foldername}?ref=${branchName}`)
+	return await fetch(`https://api.github.com/repos/${repoOwner}/${repo_name}/contents/${foldername}?ref=${branchName}`)
 		.then(res => res.json())
 		.then(async function(data) { return data; })
 		.catch(error => { console.log(error); });
@@ -119,15 +129,15 @@ async function GET_repo_file_info_RESTAPI_fast(repoOwner, repo_name, branchName,
 
 // ----------------------------------------------------
 
-function get_number(x) {
+async function get_number(x) {
 	return x[Math.round(x.length*Math.random())-1];
 }
 	  
-function rand_perm(x) {
+async function rand_perm(x) {
 
 	var out = [];
 	while (out.length != x.length) {
-		out = get_number(x).then(async function(x_of_y) {
+		out = await get_number(x).then(async function(x_of_y) {
 			if (out.includes(x_of_y) == false && typeof x_of_y != "undefined") { 
 				out.push(x_of_y);
 			}
@@ -139,6 +149,8 @@ function rand_perm(x) {
 	
 }  // end of rand_perm
 
+// ----------------------------------------------------
+	
 </script>
 </body>
 </html>
