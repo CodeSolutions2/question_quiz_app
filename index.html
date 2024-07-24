@@ -58,7 +58,13 @@ async function GET_fileDownloadUrl_and_sha_for_a_folder(desired_foldername, repo
 	var url = `https://api.github.com/repos/${repoOwner}/${repo_name}/contents`;
 	// console.log('url: ', url);
 
-	var data = await fetch(url).then(res => res.json());
+	var data = await fetch(url)
+		.then(res => res.json())
+		.then(async function(data) {
+			
+			console.log('data: ', data);
+			return data;
+		});
 	console.log('data: ', data);
 
   	// search to find the foldername and 
