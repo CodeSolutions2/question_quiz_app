@@ -4,10 +4,10 @@
     
 <body>
     <div id="btns" class="buttonContainer">
-        <button id="btn1" class="buttonClass">Question 0</button>
-        <button id="btn2" class="buttonClass">Question 1</button>
-        <button id="btn3" class="buttonClass">Question 2</button>
-        <button id="btn4" class="buttonClass">Question 3</button>
+        <button id="btn0" class="buttonClass">Question 0</button>
+        <button id="btn1" class="buttonClass">Question 1</button>
+        <button id="btn2" class="buttonClass">Question 2</button>
+        <button id="btn3" class="buttonClass">Question 3</button>
     </div>
 	
 <button id="load_a_test" onclick="load_a_test" style="display:block;">Load a test</button>
@@ -37,69 +37,101 @@ window.addEventListener('beforeunload', function() {
 });
 
 
-// btn.innerText = count;
+// 
 	
 // ----------------------------------------------------
+
 const foldername = "Q_Git";
 const repo_name = "question_quiz_app";
 const repoOwner = "CodeSolutions2";
-
-
-document.getElementById("load_a_test").addEventListener("click", async () => {
-
-	console.log('button clicked');
-	await GET_fileDownloadUrl_and_sha_for_a_folder(foldername, repo_name, repoOwner);
-});
-
-
-async function load_a_test() {
-
-	// await GET_fileDownloadUrl_and_sha_for_a_folder(foldername, repo_name, repoOwner);
-	var url = `https://api.github.com/repos/${repoOwner}/${repo_name}/contents`;
-	// console.log('url: ', url);
-
-	var data = await fetch(url)
-		.then(res => res.json())
-		.then(async function(data) {
-			
-			console.log('data: ', data);
-			return data;
-		});
-	console.log('data: ', data);
-}
+const branchName = "main";
 
 // ----------------------------------------------------
 
-async function GET_fileDownloadUrl_and_sha_for_a_folder(foldername, repo_name, repoOwner) {
+// Initially load the questions from the repository
+const file_obj = await GET_fileobjects_for_a_folder(foldername, repo_name, repoOwner, branchName);
 
+var x = Array.from({ length: file_obj.length }, (_, ind) => ind);
+var x_rand = await rand_perm(x);
 
-	// Returns an object of values that are an array
-	// var url = `https://api.github.com/repos/${repoOwner}/${repo_name}/contents`;
-	var url = `https://api.github.com/repos/${repoOwner}/${repo_name}/contents/${foldername}?ref=main`;
-	// console.log('url: ', url);
+// ----------------------------------------------------
+	
+document.getElementById("load_a_test").addEventListener("click", async () => {
 
-	var data = await fetch(url)
-		.then(res => res.json())
-		.then(async function(data) {
-			
-			console.log('data: ', data);
-			return data;
+	console.log('button clicked');
+
+	if (x_rand.length > 0) {
+		var text = await GET_repo_file_info_RESTAPI_fast(repoOwner, repo_name, branchName, foldername, file_obj[x_rand.shift()].name);
+		
+		const NonEmptyVals_toKeep = (x) => x.length != 0;
+		var QandA_list = text.split('\n').filter(NonEmptyVals_toKeep);
+		
+		var A = QandA_list.map((x, ind) => {
+			if (ind < QandA_list.length-1) {
+				document.getElementById(`btn${ind}`).innerText = x;
+				return '';
+			} else {
+				return x;
+			}
 		});
-	console.log('data: ', data);
+	
+		// Answer
+		 A = A.filter(NonEmptyVals_toKeep).at(0);
+	} else {
+		document.getElementById("load_a_test").innerHTML = "All questions have been used. Please push Restart to restart."
+	}
+	
+});
 
-  	// search to find the foldername and 
 
+// async function load_a_test() { }
+
+// ----------------------------------------------------
+
+async function GET_fileobjects_for_a_folder(repoOwner, repo_name, foldername, branchName) {
+
+	// Using url
+	return await fetch(`https://api.github.com/repos/${repoOwner}/${repo_name}/contents/${foldername}?ref=${branchName}`)
+		.then(res => res.json())
+		.then(async function(data) { return data; })
+		.catch(error => { console.log(error); });
 }
   
-
+// ----------------------------------------------------
   
-async function GET_repo_file_info_RESTAPI_fast(foldername, filename) {
-	return await fetch(`https://raw.githubusercontent.com/CodeSolutions2/question_quiz_app/main/${foldername}/${filename}`)
+async function GET_repo_file_info_RESTAPI_fast(repoOwner, repo_name, branchName, foldername, filename) {
+	
+	// Using download_url
+	return await fetch(`https://raw.githubusercontent.com/${repoOwner}/${repo_name}/${branchName}/${foldername}/${filename}`)
 		.then(res => res.text())
 		.then(async function (text_out) { return  text_out; })
 		.catch(error => { console.log(error); });
 }
 
+// ----------------------------------------------------
+
+async function get_number(x) {
+	return x[Math.round(x.length*Math.random())-1];
+}
+	  
+export async function rand_perm(x) {
+
+	var out = [];
+	while (out.length != x.length) {
+		out = await get_number(x).then(async function(x_of_y) {
+			if (out.includes(x_of_y) == false && typeof x_of_y != "undefined") { 
+				out.push(x_of_y);
+			}
+			return [... new Set(out)]; // ensure that only unique values are stored in out
+		});
+	}
+	
+	return out;
+
+// ----------------------------------------------------
+
+	
+}  // end of rand_perm
 
 </script>
 </body>
