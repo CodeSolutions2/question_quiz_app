@@ -62,9 +62,11 @@ document.getElementById("load_a_test").addEventListener("click", async () => {
 
 	if (x_rand.length > 0) {
 		var text = await GET_repo_file_info_RESTAPI_fast(repoOwner, repo_name, branchName, foldername, file_obj[x_rand.shift()].name);
+		console.log('text: ', text);
 		
 		const NonEmptyVals_toKeep = (x) => x.length != 0;
 		var QandA_list = text.split('\n').filter(NonEmptyVals_toKeep);
+		console.log('QandA_list: ', QandA_list);
 		
 		var A = QandA_list.map((x, ind) => {
 			if (ind < QandA_list.length-1) {
@@ -77,8 +79,9 @@ document.getElementById("load_a_test").addEventListener("click", async () => {
 	
 		// Answer
 		 A = A.filter(NonEmptyVals_toKeep).at(0);
+		console.log('A: ', A);
 	} else {
-		document.getElementById("load_a_test").innerHTML = "All questions have been used. Please push Restart to restart."
+		document.getElementById("notification").innerHTML = "All questions have been used. Please push Restart to restart."
 	}
 	
 });
