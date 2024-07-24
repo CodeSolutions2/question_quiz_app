@@ -55,7 +55,7 @@ async function load_a_test() {
 async function GET_fileDownloadUrl_and_sha_for_a_folder(desired_foldername, repo_name, repoOwner) {
 
   // Returns an object of values that are an array
-	var url = `https://api.github.com/repos/${repoOwner}/${repo_name}/${desired_foldername}/contents`;
+	var url = `https://api.github.com/repos/${repoOwner}/${repo_name}/contents`;
 	// console.log('url: ', url);
 
 	var data = await fetch(url).then(res => res.json());
