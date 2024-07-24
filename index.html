@@ -49,7 +49,8 @@ const branchName = "main";
 // ----------------------------------------------------
 
 // Initially load the questions from the repository
-const file_obj = async () => { await GET_fileobjects_for_a_folder(foldername, repo_name, repoOwner, branchName); }
+const file_obj = async () => { const out = await GET_fileobjects_for_a_folder(foldername, repo_name, repoOwner, branchName); return out; };
+console.log('file_obj: ', file_obj);
 
 var x = Array.from({ length: file_obj.length }, (_, ind) => ind);
 console.log('x: ', x);
