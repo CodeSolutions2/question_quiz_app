@@ -49,13 +49,13 @@ const branchName = "main";
 // ----------------------------------------------------
 
 // Initially load the questions from the repository
-const file_obj = async () => { const out = await GET_fileobjects_for_a_folder(foldername, repo_name, repoOwner, branchName); return out; };
+const file_obj = GET_fileobjects_for_a_folder(foldername, repo_name, repoOwner, branchName);
 console.log('file_obj: ', file_obj);
 
 var x = Array.from({ length: file_obj.length }, (_, ind) => ind);
 console.log('x: ', x);
 	
-var x_rand = async () => { await rand_perm(x);  }
+var x_rand = rand_perm(x);
 console.log('x_rand: ', x_rand);
 
 // ----------------------------------------------------
@@ -95,10 +95,10 @@ document.getElementById("load_a_test").addEventListener("click", async () => {
 
 // ----------------------------------------------------
 
-async function GET_fileobjects_for_a_folder(repoOwner, repo_name, foldername, branchName) {
+function GET_fileobjects_for_a_folder(repoOwner, repo_name, foldername, branchName) {
 
 	// Using url
-	return await fetch(`https://api.github.com/repos/${repoOwner}/${repo_name}/contents/${foldername}?ref=${branchName}`)
+	return fetch(`https://api.github.com/repos/${repoOwner}/${repo_name}/contents/${foldername}?ref=${branchName}`)
 		.then(res => res.json())
 		.then(async function(data) { return data; })
 		.catch(error => { console.log(error); });
@@ -117,15 +117,15 @@ async function GET_repo_file_info_RESTAPI_fast(repoOwner, repo_name, branchName,
 
 // ----------------------------------------------------
 
-async function get_number(x) {
+function get_number(x) {
 	return x[Math.round(x.length*Math.random())-1];
 }
 	  
-async function rand_perm(x) {
+function rand_perm(x) {
 
 	var out = [];
 	while (out.length != x.length) {
-		out = await get_number(x).then(async function(x_of_y) {
+		out = get_number(x).then(async function(x_of_y) {
 			if (out.includes(x_of_y) == false && typeof x_of_y != "undefined") { 
 				out.push(x_of_y);
 			}
@@ -134,9 +134,6 @@ async function rand_perm(x) {
 	}
 	
 	return out;
-
-// ----------------------------------------------------
-
 	
 }  // end of rand_perm
 
