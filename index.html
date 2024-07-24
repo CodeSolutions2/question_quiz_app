@@ -46,13 +46,25 @@ async function load_a_test() {
 	const foldername = "Q_Git";
 	const repo_name = "question_quiz_app";
 	const repoOwner = "CodeSolutions2";
+
 	
-	await GET_fileDownloadUrl_and_sha_for_a_folder(foldername, repo_name, repoOwner)
+	// await GET_fileDownloadUrl_and_sha_for_a_folder(foldername, repo_name, repoOwner);
+	var url = `https://api.github.com/repos/${repoOwner}/${repo_name}/contents`;
+	// console.log('url: ', url);
+
+	var data = await fetch(url)
+		.then(res => res.json())
+		.then(async function(data) {
+			
+			console.log('data: ', data);
+			return data;
+		});
+	console.log('data: ', data);
 }
 
 // ----------------------------------------------------
 
-async function GET_fileDownloadUrl_and_sha_for_a_folder(desired_foldername, repo_name, repoOwner) {
+async function GET_fileDownloadUrl_and_sha_for_a_folder(foldername, repo_name, repoOwner) {
 
   // Returns an object of values that are an array
 	var url = `https://api.github.com/repos/${repoOwner}/${repo_name}/contents`;
