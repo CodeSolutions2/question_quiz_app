@@ -52,7 +52,10 @@ const branchName = "main";
 const file_obj = async () => { await GET_fileobjects_for_a_folder(foldername, repo_name, repoOwner, branchName); }
 
 var x = Array.from({ length: file_obj.length }, (_, ind) => ind);
+console.log('x: ', x);
+	
 var x_rand = async () => { await rand_perm(x);  }
+console.log('x_rand: ', x_rand);
 
 // ----------------------------------------------------
 	
