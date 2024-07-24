@@ -40,22 +40,20 @@ window.addEventListener('beforeunload', function() {
 // btn.innerText = count;
 	
 // ----------------------------------------------------
+const foldername = "Q_Git";
+const repo_name = "question_quiz_app";
+const repoOwner = "CodeSolutions2";
 
 
 document.getElementById("load_a_test").addEventListener("click", async () => {
 
 	console.log('button clicked');
-	
+	await GET_fileDownloadUrl_and_sha_for_a_folder(foldername, repo_name, repoOwner);
 });
 
 
 async function load_a_test() {
-	
-	const foldername = "Q_Git";
-	const repo_name = "question_quiz_app";
-	const repoOwner = "CodeSolutions2";
 
-	
 	// await GET_fileDownloadUrl_and_sha_for_a_folder(foldername, repo_name, repoOwner);
 	var url = `https://api.github.com/repos/${repoOwner}/${repo_name}/contents`;
 	// console.log('url: ', url);
