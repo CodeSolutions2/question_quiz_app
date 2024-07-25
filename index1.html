@@ -63,10 +63,13 @@ var x_rand = [];
 var count = 0;
 var cur_ind = 0;
 var responseTime = [];
+var btns_selected = []
 
 // ----------------------------------------------------
 
 async function Start() {
+
+	document.getElementById("Start").style.display = "none";
 	
 	// Initially load the questions from the repository
 	file_obj = await GET_fileobjects_for_a_folder(repoOwner, repo_name, foldername, branchName);
@@ -87,24 +90,25 @@ async function Start() {
 // ----------------------------------------------------
 
 async function Next() {
-
-	if (x_rand.at(cur_ind) == x_rand.at(count)) {
+	
+	if (cur_ind == count) {
 		// Advance to a new text
 		count += 1;
 		cur_ind = count;
 		await load_a_test(x_rand.at(count));
 	} else {
 		// use the previous button and are advancing to text already viewed
+		cur_ind = cur_ind + 1;
 		await load_a_test(x_rand.at(cur_ind));
 	}
 }
 
 // ----------------------------------------------------
 
-// async function Previous() {
-// 	x_rand_org.at(count-1)
-// 	await load_a_test(x_rand);
-// }
+async function Previous() {
+	cur_ind = cur_ind - 1;
+	await load_a_test(x_rand.at(cur_ind));
+}
 
 // ----------------------------------------------------
 
@@ -133,9 +137,7 @@ async function Restart() {
 						
 async function load_a_test(q_num) {
 
-	console.log('count: ', count);
-	console.log('cur_ind: ', cur_ind);
-	
+	// Display text on buttons
 	var text = await GET_repo_file_info_RESTAPI_fast(repoOwner, repo_name, branchName, foldername, file_obj[q_num].name);
 	// console.log('text: ', text);
 	
@@ -161,8 +163,20 @@ async function load_a_test(q_num) {
 	 A = A.filter(NonEmptyVals_toKeep).at(0);
 	// console.log('A: ', A);
 
-	// Start eventListener to wait for a button push
-	await start_listening_for_user_clicks();
+	// ----------------------------------------------------
+
+	// Make a response
+	console.log('count: ', count);
+	console.log('cur_ind: ', cur_ind);
+	if (cur_ind == count) {
+		// Start eventListener to wait for a button push
+		await start_listening_for_user_clicks();
+	} else {
+		// Display the btn that was previously selected
+		document.getElementById(`btn${btns_selected.at(cur_ind)}`).style.background = #5f9341;
+
+		// *** Can make a change answer button ***
+	}
 }
 
 // ----------------------------------------------------
@@ -213,14 +227,20 @@ async function rand_perm(x) {
 // ----------------------------------------------------
 
 async function processEvent(event) {
+
+	// ----------------------------------------------------
 	
 	// When the user clicks a button, save the value
 	const user_click_btn_id = this.getAttribute("id");
+	btns_selected.push(user_click_btn_id);
 
+	// ----------------------------------------------------
+	
 	// User clicked, so can stop listening for a response
 	await stop_listening_for_user_clicks();
 	
-
+	// ----------------------------------------------------
+	
 	// Evaluate if user_click matches the answer
 	
 	// Ensure no spaces
@@ -234,16 +254,22 @@ async function processEvent(event) {
 		document.getElementById("notification").innerHTML = "Incorrect. Answer: " + A;
 	}
 	var etime = await elapsedTime(startTime, endTime)
-	document.getElementById("notification").innerHTML += "Response Time: " + etime;
+	document.getElementById("notification").innerHTML += "\nResponse Time: " + etime;
+	document.getElementById("notification").innerHTML += "\nTotal score: " + score;
 	responseTime.push(etime);
 	
 	A = "";
-
+	
+	// ----------------------------------------------------
+	
 	// Detection that questions are finished
-	if (x_rand.length == 0) {
+	if (x_rand.length-1 == count) {
 		var mean_response_time = responseTime.reduce((sum,x) => sum+x, 0) / num_of_q;
 		document.getElementById("notification").innerHTML += "Total score: " + score + ". Average response time: " + mean_response_time + ". Please click Restart to practice again.";
+		
 		document.getElementById("Next").style.display = "none";
+		document.getElementById("Previous").style.display = "none";
+		document.getElementById("Restart").style.display = "block";
 	}
 	
 }
@@ -279,6 +305,7 @@ async function start_listening_for_user_clicks() {
 	} 
 	document.getElementById("notification").innerHTML = 'Please select a response, by clicking on a button.';
 	document.getElementById("Next").style.display = "none";
+	if (cur_ind > 0) { document.getElementById("Previous").style.display = "none"; }
 }
 
 // -------------------------------------------------
@@ -299,6 +326,7 @@ async function stop_listening_for_user_clicks() {
 	} 
 	document.getElementById("notification").innerHTML = '';
 	document.getElementById("Next").style.display = "block";
+	if (cur_ind > 0) { document.getElementById("Previous").style.display = "block"; }
 	
 	endTime = await currentTime();
 }
