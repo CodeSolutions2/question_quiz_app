@@ -10,8 +10,8 @@
         <button id="btn3" class="buttonClass">Question 3</button>
     </div>
 
-<button id="Start" onclick="Start" style="display:block;">Start</button>
-<button id="load_a_test" onclick="load_a_test" style="display:block;">Load a test</button>
+<button id="Start" onclick="Start()" style="display:block;">Start</button>
+<button id="Next" onclick="Next()" style="display:block;">Load a test</button>
   
 <div id="notification"></div>
 <div id="error"></div>
@@ -49,7 +49,7 @@ const branchName = "main";
 
 // ----------------------------------------------------
 
-async function processEvent_initialize(event) {
+async function Start() {
 	
 	// Initially load the questions from the repository
 	const file_obj = await GET_fileobjects_for_a_folder(foldername, repo_name, repoOwner, branchName)
@@ -66,9 +66,8 @@ async function processEvent_initialize(event) {
 
 // ----------------------------------------------------
 
-document.getElementById("Start").addEventListener("click", processEvent_initialize, false);
 	
-document.getElementById("load_a_test").addEventListener("click", processEvent_load_a_test, false);
+// document.getElementById("load_a_test").addEventListener("click", processEvent_load_a_test, false);
 
 // document.getElementById("select_an_answer").addEventListener("click", processEvent_load_a_test, false);
 // ----------------------------------------------------
