@@ -58,6 +58,7 @@ var file_obj = {};
 var A = "";
 var score = 0;
 var num_of_q = 0;
+var x_rand_org = [];
 var x_rand = [];
 var count = 0;
 var cur_ind = 0;
@@ -76,7 +77,7 @@ async function Start() {
 	var x = await Array.from({ length: num_of_q }, (_, ind) => ind);
 	console.log('x: ', x);
 		
-	var x_rand_org = await rand_perm(x);
+	x_rand_org = await rand_perm(x);
 	console.log('x_rand_org: ', x_rand_org);
 	x_rand = x_rand_org;
 
@@ -260,38 +261,40 @@ async function stop_one_eventlister(val) {
 async function start_listening_for_user_clicks() {
 	
 	startTime = await currentTime();
-	await start_one_eventlister(0)
-		.then(async function() { await start_one_eventlister(1); })
-		.then(async function() { await start_one_eventlister(2); })
-		.then(async function() { await start_one_eventlister(3); })
-		.then(function() { document.getElementById("notification").innerHTML = 'Please select a response, by clicking on a button.'; document.getElementById("Next").style.display = "none"; });
+	
+	// await start_one_eventlister(0)
+	// 	.then(async function() { await start_one_eventlister(1); })
+	// 	.then(async function() { await start_one_eventlister(2); })
+	// 	.then(async function() { await start_one_eventlister(3); })
+	// 	.then(function() { document.getElementById("notification").innerHTML = 'Please select a response, by clicking on a button.'; document.getElementById("Next").style.display = "none"; });
 
 	// OR
 
-	// for (let i=0; i<num_of_q; i++) {
-	// 	document.getElementById(`btn${i}`).addEventListener("click", processEvent, false);
-	// } 
-	// document.getElementById("notification").innerHTML = 'Please select a response, by clicking on a button.';
+	for (let i=0; i<num_of_q; i++) {
+	 	document.getElementById(`btn${i}`).addEventListener("click", processEvent, false);
+	} 
+	document.getElementById("notification").innerHTML = 'Please select a response, by clicking on a button.';
 }
 
 // -------------------------------------------------
 
 async function stop_listening_for_user_clicks() {
 	 
-	await stop_one_eventlister(0)
-		.then(async function() { await stop_one_eventlister(1); })
-		.then(async function() { await stop_one_eventlister(2); })
-		.then(async function() { await stop_one_eventlister(3); })
-		.then(async () => { await new Promise(r => setTimeout(r, 200)); })
-		.then(function() { document.getElementById("notification").innerHTML = ''; document.getElementById("Next").style.display = "block"; });
-	endTime = await currentTime();
+	// await stop_one_eventlister(0)
+	// 	.then(async function() { await stop_one_eventlister(1); })
+	// 	.then(async function() { await stop_one_eventlister(2); })
+	// 	.then(async function() { await stop_one_eventlister(3); })
+	// 	.then(async () => { await new Promise(r => setTimeout(r, 200)); })
+	// 	.then(function() { document.getElementById("notification").innerHTML = ''; document.getElementById("Next").style.display = "block"; });
 
 	// OR
 
-	// for (let i=0; i<num_of_q; i++) {
-	// 	document.getElementById(`btn${i}`).removeEventListener("click", processEvent, false);
-	// } 
-	// document.getElementById("notification").innerHTML = '';
+	for (let i=0; i<num_of_q; i++) {
+	 	document.getElementById(`btn${i}`).removeEventListener("click", processEvent, false);
+	} 
+	document.getElementById("notification").innerHTML = '';
+	
+	endTime = await currentTime();
 }
 
 // -------------------------------------------------
