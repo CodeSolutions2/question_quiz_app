@@ -3,6 +3,7 @@
 <head></head>
     
 <body>
+    <div id="Q"></div>
     <div id="Qbtns" class="QuestionbuttonContainer">
         <button id="btn0" class="QbuttonClass">Question 0</button>
         <button id="btn1" class="QbuttonClass">Question 1</button>
@@ -136,6 +137,8 @@ async function load_a_test(q_num) {
 	
 	var QandA_list = text.split('\n').filter(NonEmptyVals_toKeep);
 	console.log('QandA_list: ', QandA_list);
+	
+	document.getElementById("Q").innerHTML = "Q: " + QandA_list.shift();
 
 	console.log('QandA_list.length: ', QandA_list.length);
 	
