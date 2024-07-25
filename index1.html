@@ -97,7 +97,7 @@ async function Next() {
 		cur_ind = count;
 		await load_a_test(x_rand.at(count));
 	} else {
-		document.getElementById(`${btns_selected.at(cur_ind)}`).style.background = '#d4d4d4'; // Reset button color
+		// document.getElementById(`${btns_selected.at(cur_ind)}`).style.background = '#d4d4d4'; // Reset button color
 		// use the previous button and are advancing to text already viewed
 		await load_a_test(x_rand.at(cur_ind));
 		cur_ind = cur_ind + 1;
@@ -107,9 +107,8 @@ async function Next() {
 // ----------------------------------------------------
 
 async function Previous() {
-
 	
-	document.getElementById(`${btns_selected.at(cur_ind)}`).style.background = '#d4d4d4'; // Reset button color
+	// document.getElementById(`${btns_selected.at(cur_ind)}`).style.background = '#d4d4d4'; // Reset button color
 	cur_ind = cur_ind - 1;
 	await load_a_test(x_rand.at(cur_ind));
 }
@@ -178,8 +177,8 @@ async function load_a_test(q_num) {
 	} else {
 		// Display the btn that was previously selected
 		console.log('btns_selected: ', btns_selected);
-		console.log('btns_selected.at(cur_ind) : ', `btn${btns_selected.at(cur_ind)}`);
-		document.getElementById(`${btns_selected.at(cur_ind)}`).style.background = '#5f9341';
+		console.log('btns_selected.at(cur_ind) : ', `${btns_selected.at(cur_ind)}`);
+		// document.getElementById(`${btns_selected.at(cur_ind)}`).style.background = '#5f9341';
 
 		// *** Can make a change answer button ***
 	}
