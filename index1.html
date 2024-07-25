@@ -277,6 +277,7 @@ async function start_listening_for_user_clicks() {
 	 	document.getElementById(`btn${i}`).addEventListener("click", processEvent, false);
 	} 
 	document.getElementById("notification").innerHTML = 'Please select a response, by clicking on a button.';
+	document.getElementById("Next").style.display = "none";
 }
 
 // -------------------------------------------------
@@ -296,6 +297,7 @@ async function stop_listening_for_user_clicks() {
 	 	document.getElementById(`btn${i}`).removeEventListener("click", processEvent, false);
 	} 
 	document.getElementById("notification").innerHTML = '';
+	document.getElementById("Next").style.display = "block";
 	
 	endTime = await currentTime();
 }
