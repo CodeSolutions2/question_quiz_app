@@ -59,7 +59,6 @@ var A = "";
 var score = 0;
 var num_of_q = 0;
 var num_of_btns = 0;
-var x_rand_org = [];
 var x_rand = [];
 var count = 0;
 var cur_ind = 0;
@@ -76,11 +75,10 @@ async function Start() {
 	num_of_q = file_obj.length ;
 
 	var x = await Array.from({ length: num_of_q }, (_, ind) => ind);
-	console.log('x: ', x);
+	// console.log('x: ', x);
 		
-	x_rand_org = await rand_perm(x);
-	console.log('x_rand_org: ', x_rand_org);
-	x_rand = x_rand_org;
+	x_rand = await rand_perm(x);
+	console.log('x_rand: ', x_rand);
 
 	// Show the first question
 	await load_a_test(x_rand.shift());
@@ -90,14 +88,14 @@ async function Start() {
 
 async function Next() {
 
-	if (x_rand_org.at(cur_ind) == x_rand.at(0)) {
+	if (x_rand.at(cur_ind) == x_rand.at(count)) {
 		// Advance to a new text
 		count += 1;
 		cur_ind = count;
-		await load_a_test(x_rand.shift());
+		await load_a_test(x_rand.at(count));
 	} else {
 		// use the previous button and are advancing to text already viewed
-		await load_a_test(x_rand_org.at(cur_ind));
+		await load_a_test(x_rand.at(cur_ind));
 	}
 }
 
@@ -134,21 +132,24 @@ async function Restart() {
 // ----------------------------------------------------
 						
 async function load_a_test(q_num) {
+
+	console.log('count: ', count);
+	console.log('cur_ind: ', cur_ind);
 	
 	var text = await GET_repo_file_info_RESTAPI_fast(repoOwner, repo_name, branchName, foldername, file_obj[q_num].name);
-	console.log('text: ', text);
+	// console.log('text: ', text);
 	
 	var QandA_list = text.split('\n').filter(NonEmptyVals_toKeep);
-	console.log('QandA_list: ', QandA_list);
+	// console.log('QandA_list: ', QandA_list);
 	
 	document.getElementById("Q").innerHTML = "Q: " + QandA_list.shift();
 
-	console.log('QandA_list.length: ', QandA_list.length);
+	// console.log('QandA_list.length: ', QandA_list.length);
 
 	num_of_btns = QandA_list.length - 1; // it is minus 1 to account for the A at the end
 	
 	A = QandA_list.map((x, ind) => {
-		console.log('ind: ', ind);
+		// console.log('ind: ', ind);
 		if (ind < num_of_btns) {
 			document.getElementById(`btn${ind}`).innerText = x;
 			return '';
@@ -158,7 +159,7 @@ async function load_a_test(q_num) {
 	});
 	
 	 A = A.filter(NonEmptyVals_toKeep).at(0);
-	console.log('A: ', A);
+	// console.log('A: ', A);
 
 	// Start eventListener to wait for a button push
 	await start_listening_for_user_clicks();
