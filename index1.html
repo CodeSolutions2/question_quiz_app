@@ -58,6 +58,7 @@ var file_obj = {};
 var A = "";
 var score = 0;
 var num_of_q = 0;
+var num_of_btns = 0;
 var x_rand_org = [];
 var x_rand = [];
 var count = 0;
@@ -72,7 +73,7 @@ async function Start() {
 	file_obj = await GET_fileobjects_for_a_folder(repoOwner, repo_name, foldername, branchName);
 	console.log('file_obj: ', file_obj);
 
-	num_of_q = file_obj.length;
+	num_of_q = file_obj.length ;
 
 	var x = await Array.from({ length: num_of_q }, (_, ind) => ind);
 	console.log('x: ', x);
@@ -143,10 +144,12 @@ async function load_a_test(q_num) {
 	document.getElementById("Q").innerHTML = "Q: " + QandA_list.shift();
 
 	console.log('QandA_list.length: ', QandA_list.length);
+
+	num_of_btns = QandA_list.length - 1; // it is minus 1 to account for the A at the end
 	
 	A = QandA_list.map((x, ind) => {
 		console.log('ind: ', ind);
-		if (ind < QandA_list.length-1) {
+		if (ind < num_of_btns) {
 			document.getElementById(`btn${ind}`).innerText = x;
 			return '';
 		} else {
@@ -270,7 +273,7 @@ async function start_listening_for_user_clicks() {
 
 	// OR
 
-	for (let i=0; i<num_of_q; i++) {
+	for (let i=0; i<num_of_btns; i++) {
 	 	document.getElementById(`btn${i}`).addEventListener("click", processEvent, false);
 	} 
 	document.getElementById("notification").innerHTML = 'Please select a response, by clicking on a button.';
@@ -289,7 +292,7 @@ async function stop_listening_for_user_clicks() {
 
 	// OR
 
-	for (let i=0; i<num_of_q; i++) {
+	for (let i=0; i<num_of_btns; i++) {
 	 	document.getElementById(`btn${i}`).removeEventListener("click", processEvent, false);
 	} 
 	document.getElementById("notification").innerHTML = '';
