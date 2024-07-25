@@ -25,7 +25,7 @@
 
 <!-- CSS -->
 <style>
-div { padding: 10px; display:block; font-family:courier; font-size:15px; height:300px; }
+div { padding: 10px; display:block; font-family:courier; font-size:15px; height:0px; }
 div#notification { position: relative; color: #3236a8; }
 div#error { position: relative; color: #bd1f17; }
 
@@ -33,7 +33,7 @@ div#error { position: relative; color: #bd1f17; }
 .QuestionbuttonContainer > .QbuttonClass { width: 400px; height: 48px; font-size: 12px; text-wrap: wrap; }
 
 .UsagebuttonContainer { width: 75%; display: flex; flex-direction: row; justify-content: flex-start; flex-wrap: wrap; }
-.UsagebuttonContainer > .UsebuttonClass { width: 100px; height: 48px; font-size: 12px; text-wrap: wrap; }
+.UsagebuttonContainer > .UsebuttonClass { width: 100px; height: 48px; font-size: 15px; text-wrap: wrap; }
 </style>
 	
 <!-- --------------------------------------------------- -->
@@ -227,8 +227,9 @@ async function processEvent(event) {
 	} else {
 		document.getElementById("notification").innerHTML = "Incorrect. Answer: " + A;
 	}
-	document.getElementById("notification").innerHTML += "Response Time: " + endTime-startTime;
-	responseTime.push(endTime-startTime);
+	var etime = await elapsedTime(startTime, endTime)
+	document.getElementById("notification").innerHTML += "Response Time: " + etime;
+	responseTime.push(etime);
 	
 	A = "";
 
@@ -290,6 +291,23 @@ async function stop_listening_for_user_clicks() {
 	// 	document.getElementById(`btn${i}`).removeEventListener("click", processEvent, false);
 	// } 
 	// document.getElementById("notification").innerHTML = '';
+}
+
+// -------------------------------------------------
+
+async function currentTime() { 
+	let date = new Date(); 
+	let hh = date.getHours(); 
+	let mm = date.getMinutes(); 
+	let ss = date.getSeconds();
+	return [hh, mm, ss];
+}
+
+// -------------------------------------------------
+
+async function elapsedTime(startTime, endTime) {
+	return (endTime[0]*60*60 + endTime[1]*60 + endTime[2]) - (startTime[0]*60*60 + startTime[1]*60 + startTime[2]);
+	
 }
 
 // -------------------------------------------------
