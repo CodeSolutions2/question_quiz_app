@@ -54,9 +54,6 @@ const branchName = "main";
 async function Start() {
 	
 	// Initially load the questions from the repository
-	const out = await GET_repo_file_info_RESTAPI_fast(repoOwner, repo_name, branchName, foldername, filename)
-	console.log('out: ', out);
-	
 	const file_obj = await GET_fileobjects_for_a_folder(foldername, repo_name, repoOwner, branchName)
 	console.log('file_obj: ', file_obj);
 
@@ -110,7 +107,10 @@ async function processEvent_load_a_test(event) {
 async function GET_fileobjects_for_a_folder(repoOwner, repo_name, foldername, branchName) {
 
 	// Using url
-	return await fetch(`https://api.github.com/repos/${repoOwner}/${repo_name}/contents/${foldername}?ref=${branchName}`)
+	// const url = `https://api.github.com/repos/${repoOwner}/${repo_name}/contents/${foldername}?ref=${branchName}`; // error
+	const url = `https://api.github.com/repos/${repoOwner}/${repo_name}/contents/`
+	
+	return await fetch(url)
 		.then(res => res.json())
 		.then(async function(data) { return data; })
 		.catch(error => { console.log(error); });
