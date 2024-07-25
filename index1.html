@@ -108,7 +108,7 @@ async function GET_fileobjects_for_a_folder(repoOwner, repo_name, foldername, br
 
 	// Using url
 	// const url = `https://api.github.com/repos/${repoOwner}/${repo_name}/contents/${foldername}?ref=${branchName}`; // error
-	const url = `https://api.github.com/repos/${repoOwner}/${repo_name}/contents/`
+	const url = `https://api.github.com/repos/${repoOwner}/${repo_name}/contents`
 	
 	return await fetch(url)
 		.then(res => res.json())
