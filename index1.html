@@ -52,7 +52,8 @@ const repoOwner = "CodeSolutions2";
 const branchName = "main";
 
 const NonEmptyVals_toKeep = (x) => x.length != 0;
-	
+
+var file_obj = {};
 var A = "";
 var score = 0;
 var num_of_q = 0;
@@ -65,7 +66,7 @@ var cur_ind = 0;
 async function Start() {
 	
 	// Initially load the questions from the repository
-	const file_obj = await GET_fileobjects_for_a_folder(repoOwner, repo_name, foldername, branchName);
+	file_obj = await GET_fileobjects_for_a_folder(repoOwner, repo_name, foldername, branchName);
 	console.log('file_obj: ', file_obj);
 
 	num_of_q = file_obj.length;
