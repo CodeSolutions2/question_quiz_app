@@ -11,7 +11,9 @@
     </div>
 
 <button id="Start" onclick="Start()" style="display:block;">Start</button>
-<button id="Next" onclick="Next()" style="display:block;">Load a test</button>
+<button id="Next" onclick="Next()" style="display:block;">Next</button>
+<button id="Previous" onclick="Previous()" style="display:block;">Previous</button>
+<button id="Restart" onclick="Restart()" style="display:block;">Restart</button>
   
 <div id="notification"></div>
 <div id="error"></div>
@@ -52,16 +54,18 @@ const branchName = "main";
 async function Start() {
 	
 	// Initially load the questions from the repository
+	const out = await GET_repo_file_info_RESTAPI_fast(repoOwner, repo_name, branchName, foldername, filename)
+	console.log('out: ', out);
+	
 	const file_obj = await GET_fileobjects_for_a_folder(foldername, repo_name, repoOwner, branchName)
 	console.log('file_obj: ', file_obj);
 
-	var x = await Array.from({ length: file_obj.length }, (_, ind) => ind);
-	console.log('x: ', x);
+	// var x = await Array.from({ length: file_obj.length }, (_, ind) => ind);
+	// console.log('x: ', x);
 		
-	var x_rand = await rand_perm(x);
-	console.log('x_rand: ', x_rand);
+	// var x_rand = await rand_perm(x);
+	// console.log('x_rand: ', x_rand);
 
-	// await processEvent_load_a_test();
 }
 
 // ----------------------------------------------------
