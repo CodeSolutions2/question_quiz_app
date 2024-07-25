@@ -268,9 +268,11 @@ async function processEvent(event) {
 	// ----------------------------------------------------
 	
 	// Detection that questions are finished
-	if (x_rand.length-1 == count) {
+	console.log('count: ', count, "x_rand.length", x_rand.length);
+	if (x_rand.length == count) {
 		var mean_response_time = responseTime.reduce((sum,x) => sum+x, 0) / num_of_q;
-		document.getElementById("notification").innerHTML += "Total score: " + score + ". Average response time: " + mean_response_time + ". Please click Restart to practice again.";
+		document.getElementById("notification").innerHTML += "Total score: " + score;
+		document.getElementById("notification").innerHTML += "\nAverage response time: " + mean_response_time + ". Please click Restart to practice again.";
 		
 		document.getElementById("Next").style.display = "none";
 		document.getElementById("Previous").style.display = "none";
