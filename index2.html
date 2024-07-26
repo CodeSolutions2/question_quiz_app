@@ -180,8 +180,9 @@ async function Restart() {
 	var initial_btn_list = ["Question 0", "Question 1", "Question 2", "Question 3"];
 	initial_btn_list.map((x, ind) => { document.getElementById(`btn${ind}`).innerText = x; return ''; });
 
-	document.getElementById(`${btns_selected.at(cur_ind)}`).style.background = '#d4d4d4'; // Reset button color
-	document.getElementById(`${A_btn_id.at(cur_ind)}`).style.background = '#d4d4d4'; // Reset button color
+	for (let i=0; i<4; i++) {
+		document.getElementById(`btn${i}`).style.background = '#d4d4d4'; // Reset button color
+	}
 }
 	
 // ----------------------------------------------------
