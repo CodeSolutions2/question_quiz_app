@@ -1,0 +1,6 @@
+You find a bug in your project, but can’t locate where it was introduced in the commit history. How would you diagnose this problem?
+Manually backtrack through your commit history.
+Use git search -diff to compare all commits in your repository history.
+Run a git rebase to find the buggy commit.
+Use git bisect to compare the buggy commit to an early commit that works as expected.
+Use git bisect to compare the buggy commit to an early commit that works as expected.
