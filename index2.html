@@ -134,6 +134,8 @@ async function Previous() {
 
 	document.getElementById("notification").innerHTML = "";
 
+	if (cur_ind == num_of_q-1 && count == num_of_q-1) { document.getElementById("Next").style.display = "block"; }
+
 	// Remove any old highlighting, so new highlighting can be applied
 	// change button color back to original
 	// console.log('load_a_test - btns_selected.at(cur_ind) : ', `${btns_selected.at(cur_ind)}`);
@@ -144,6 +146,8 @@ async function Previous() {
 	await load_a_test(x_rand.at(cur_ind));
 
 	if (cur_ind == 0) { document.getElementById("Previous").style.display = "none"; }
+
+	
 }
 
 // ----------------------------------------------------
@@ -343,7 +347,7 @@ async function processEvent(event) {
 		document.getElementById("notification").innerHTML += "Total score: " + score + "<br>";
 		document.getElementById("notification").innerHTML += "Average response time: " + mean_response_time + ". Please click Restart to practice again, or review responses with the Next and Previous buttons.";
 		
-		document.getElementById("Next").style.display = "block";
+		document.getElementById("Next").style.display = "none";
 		document.getElementById("Previous").style.display = "block";
 		document.getElementById("Restart").style.display = "block";
 	}
