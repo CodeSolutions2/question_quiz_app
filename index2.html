@@ -310,11 +310,11 @@ async function processEvent(event) {
 	
 	// Evaluate if user_click matches the answer
 	if (A_btn_id.at(count) == user_click_btn_id) {
-		document.getElementById("notification").innerHTML = "Correct."<br>;
+		document.getElementById("notification").innerHTML = "Correct.<br>";
 		document.getElementById(`${user_click_btn_id}`).style.background = '#5f9341';
 		score += 1;
 	} else {
-		document.getElementById("notification").innerHTML = "Incorrect."<br>;
+		document.getElementById("notification").innerHTML = "Incorrect.<br>";
 		document.getElementById(`${A_btn_id.at(count)}`).style.background = '#5f9341';
 		document.getElementById(`${user_click_btn_id}`).style.background = '#fa7573';
 	}
