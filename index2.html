@@ -327,7 +327,7 @@ async function processEvent(event) {
 	}
 	var etime = await elapsedTime(startTime, endTime)
 	document.getElementById("notification").innerHTML += "Response Time: " + etime + "<br>";
-	document.getElementById("notification").innerHTML += ", Total score: " + score;
+	document.getElementById("notification").innerHTML += "Total score: " + score;
 	responseTime.push(etime);
 	
 	// ----------------------------------------------------
