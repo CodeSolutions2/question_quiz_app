@@ -84,7 +84,7 @@ async function Start() {
 	
 	// Initially load the questions from the repository
 	file_obj = await GET_fileobjects_for_a_folder(repoOwner, repo_name, foldername, branchName);
-	console.log('file_obj: ', file_obj);
+	// console.log('file_obj: ', file_obj);
 
 	num_of_q = file_obj.length ;
 
@@ -92,7 +92,7 @@ async function Start() {
 	// console.log('x: ', x);
 		
 	x_rand = await rand_perm(x);
-	console.log('x_rand: ', x_rand);
+	// console.log('x_rand: ', x_rand);
 
 	// Show the first question
 	await load_a_test(x_rand.at(count));
@@ -193,7 +193,7 @@ async function Restart() {
 						
 async function load_a_test(q_num) {
 
-	console.log('q_num: ', q_num);
+	// console.log('q_num: ', q_num);
 
 	// Display text on buttons
 	var text = await GET_repo_file_info_RESTAPI_fast(repoOwner, repo_name, branchName, foldername, file_obj[q_num].name);
@@ -207,7 +207,7 @@ async function load_a_test(q_num) {
 	// console.log('QandA_list.length: ', QandA_list.length);
 
 	num_of_btns = QandA_list.length - 1; // it is minus 1 to account for the A at the end
-	console.log('num_of_btns: ', num_of_btns);
+	// console.log('num_of_btns: ', num_of_btns);
 	
 	var temp = QandA_list.map((x, ind) => {
 		// console.log('ind: ', ind);
@@ -239,12 +239,12 @@ async function load_a_test(q_num) {
 	// ----------------------------------------------------
 
 	// Make a response
-	console.log('count: ', count);
-	console.log('cur_ind: ', cur_ind);
+	// console.log('count: ', count);
+	// console.log('cur_ind: ', cur_ind);
 	if (cur_ind == count && count > btns_selected.length-1) {
 		// Start eventListener to wait for a button push
 		A_btn_id.push(temp.filter(NonEmptyVals_toKeep).at(0));
-		console.log('A_btn_id: ', A_btn_id);
+		// console.log('A_btn_id: ', A_btn_id);
 		
 		await start_listening_for_user_clicks();
 	} else {
@@ -269,7 +269,6 @@ async function GET_fileobjects_for_a_folder(repoOwner, repo_name, foldername, br
 
 	// Using url
 	const url = `https://api.github.com/repos/${repoOwner}/${repo_name}/contents/${foldername}?ref=${branchName}`;
-	// const url = `https://api.github.com/repos/${repoOwner}/${repo_name}/contents`
 	
 	return await fetch(url)
 		.then(res => res.json())
