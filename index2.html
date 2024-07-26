@@ -92,7 +92,7 @@ async function Start() {
 	// console.log('x: ', x);
 		
 	x_rand = await rand_perm(x);
-	// console.log('x_rand: ', x_rand);
+	console.log('x_rand: ', x_rand);
 
 	// Show the first question
 	await load_a_test(x_rand.at(count));
@@ -217,7 +217,7 @@ async function load_a_test(q_num) {
 		} else {
 			// Return the button Id of the Answer
 			A = [QandA_list.at(num_of_btns)].filter(NonEmptyVals_toKeep).join(' ');
-			console.log('A: ', A);
+			// console.log('A: ', A);
 			
 			// var i = 0;
 			// while ([QandA_list.at(i)].filter(NonEmptyVals_toKeep).join(' ') != A && i < num_of_btns) {
