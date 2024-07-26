@@ -101,6 +101,8 @@ async function Start() {
 // ----------------------------------------------------
 
 async function Next() {
+
+	if (cur_ind > 0) { document.getElementById("Previous").style.display = "block"; }
 	
 	if (cur_ind == count) {
 
@@ -138,6 +140,8 @@ async function Previous() {
   
 	cur_ind = cur_ind - 1;
 	await load_a_test(x_rand.at(cur_ind));
+
+	if (cur_ind == 0) { document.getElementById("Previous").style.display = "none"; }
 }
 
 // ----------------------------------------------------
@@ -167,7 +171,7 @@ async function Restart() {
 	// Reinitialize usage buttons
 	document.getElementById("Start").style.display = "block";
 	document.getElementById("Next").style.display = "none";
-	document.getElementById("Previous").style.display = "none";
+	 = "none";
 	document.getElementById("Restart").style.display = "none";
 
 	// Reinitialize default screen
@@ -220,9 +224,7 @@ async function load_a_test(q_num) {
 			return `btn${out}`;
 		}
 	});
-	
-	 A_btn_id.push(temp.filter(NonEmptyVals_toKeep).at(0));
-	console.log('A_btn_id: ', A_btn_id);
+	 
 
 	// ----------------------------------------------------
 
@@ -231,6 +233,9 @@ async function load_a_test(q_num) {
 	console.log('cur_ind: ', cur_ind);
 	if (cur_ind == count && count > btns_selected.length-1) {
 		// Start eventListener to wait for a button push
+		A_btn_id.push(temp.filter(NonEmptyVals_toKeep).at(0));
+		console.log('A_btn_id: ', A_btn_id);
+		
 		await start_listening_for_user_clicks();
 	} else {
 		// Display the btn that was previously selected
