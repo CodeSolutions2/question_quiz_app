@@ -3,6 +3,13 @@
 <head></head>
     
 <body>
+
+<h1>Question quiz webapp</h1>
+<ol type="A">
+	<li>Enter a foldername.</li>
+	<li>Click Start to begin a practice session.</li>
+</ol>
+    <input id="foldername" type="text" value="" placeholder="foldername" rows="10" cols="100" style="display:block; text-align: left; width: 150px;">
     <div id="Q"></div>
     <div id="Qbtns" class="QuestionbuttonContainer">
         <button id="btn0" class="QbuttonClass">Question 0</button>
@@ -29,10 +36,10 @@ div { padding: 10px; display:block; font-family:courier; font-size:15px; }
 div#notification { position: relative; color: #3236a8; }
 div#error { position: relative; color: #bd1f17; }
 
-.QuestionbuttonContainer { width: 75%; display: flex; flex-direction: column; justify-content: flex-start; flex-wrap: wrap; }
+.QuestionbuttonContainer { width: 75%; display: flex; flex-direction: column; justify-content: flex-start; flex-wrap: wrap; text-align: center; }
 .QuestionbuttonContainer > .QbuttonClass { width: 400px; height: 48px; font-size: 12px; text-wrap: wrap; background: #d4d4d4 }
 
-.UsagebuttonContainer { width: 75%; display: flex; flex-direction: row; justify-content: flex-start; flex-wrap: wrap; }
+.UsagebuttonContainer { width: 75%; display: flex; flex-direction: row; justify-content: space-evenly; flex-wrap: wrap; }
 .UsagebuttonContainer > .UsebuttonClass { width: 100px; height: 48px; font-size: 15px; text-wrap: wrap; }
 </style>
 	
@@ -47,7 +54,7 @@ window.addEventListener('beforeunload', function() {
 	
 // ----------------------------------------------------
 
-const foldername = "Q_Git";
+// const foldername = "Q_Git";
 const repo_name = "question_quiz_app";
 const repoOwner = "CodeSolutions2";
 const branchName = "main";
@@ -70,9 +77,10 @@ var btns_selected = []
 async function Start() {
 
 	document.getElementById("Start").style.display = "none";
+	document.getElementById("foldername").style.display = "none";
 	
 	// Initially load the questions from the repository
-	file_obj = await GET_fileobjects_for_a_folder(repoOwner, repo_name, foldername, branchName);
+	file_obj = await GET_fileobjects_for_a_folder(repoOwner, repo_name, document.getElementById("foldername").value, branchName);
 	console.log('file_obj: ', file_obj);
 
 	num_of_q = file_obj.length ;
@@ -98,10 +106,10 @@ async function Next() {
 		await load_a_test(x_rand.at(count));
 	} else {
 		// change button color back to original
-    console.log('load_a_test - btns_selected.at(cur_ind) : ', `${btns_selected.at(cur_ind)}`);
-    document.getElementById(`${btns_selected.at(cur_ind)}`).style.background = '#d4d4d4'; // Reset button color
+		console.log('load_a_test - btns_selected.at(cur_ind) : ', `${btns_selected.at(cur_ind)}`);
+		document.getElementById(`${btns_selected.at(cur_ind)}`).style.background = '#d4d4d4'; // Reset button color
 		
-    cur_ind = cur_ind + 1;
+		cur_ind = cur_ind + 1;
 		await load_a_test(x_rand.at(cur_ind));
 	}
 }
@@ -130,6 +138,11 @@ async function Restart() {
 	var count = 0;
 	var cur_ind = 0;
 
+	// Reinitialize text
+	document.getElementById("foldername").style.display = "block";
+	document.getElementById("Q").innerHTML = "Click Start to begin another practice session for foldername test.";
+	document.getElementById("notification").innerHTML = "";
+	
 	// Reinitialize usage buttons
 	document.getElementById("Start").style.display = "block";
 	document.getElementById("Next").style.display = "none";
@@ -144,6 +157,8 @@ async function Restart() {
 // ----------------------------------------------------
 						
 async function load_a_test(q_num) {
+
+	console.log('q_num: ', q_num);
 
 	// Display text on buttons
 	var text = await GET_repo_file_info_RESTAPI_fast(repoOwner, repo_name, branchName, foldername, file_obj[q_num].name);
@@ -176,14 +191,14 @@ async function load_a_test(q_num) {
 	// Make a response
 	console.log('count: ', count);
 	console.log('cur_ind: ', cur_ind);
-	if (cur_ind == count) {
+	if (cur_ind == count && count > btns_selected.length-1) {
 		// Start eventListener to wait for a button push
 		await start_listening_for_user_clicks();
 	} else {
 		// Display the btn that was previously selected
 		console.log('btns_selected: ', btns_selected);
 		console.log('load_a_test - btns_selected.at(cur_ind) : ', `${btns_selected.at(cur_ind)}`);
-		// document.getElementById(`${btns_selected.at(cur_ind)}`).style.background = '#5f9341';
+		document.getElementById(`${btns_selected.at(cur_ind)}`).style.background = '#5f9341';
 
 		// *** Can make a change answer button ***
 	}
@@ -275,6 +290,7 @@ async function processEvent(event) {
 	// Detection that questions are finished
 	if (x_rand.length-1 == count) {
 		var mean_response_time = responseTime.reduce((sum,x) => sum+x, 0) / num_of_q;
+		
 		document.getElementById("notification").innerHTML += "Total score: " + score;
 		document.getElementById("notification").innerHTML += "\nAverage response time: " + mean_response_time + ". Please click Restart to practice again.";
 		
