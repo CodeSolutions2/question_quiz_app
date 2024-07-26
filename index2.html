@@ -208,7 +208,7 @@ async function load_a_test(q_num) {
 			var c = 0;
 			while ([QandA_list.at(c)].filter(NonEmptyVals_toKeep).join(' ') != A && c < num_of_btns) {
 				console.log('c: ', c);
-				console.log('QandA_list.at(c): ', QandA_list.at(c).filter(NonEmptyVals_toKeep).join(' '));
+				console.log('QandA_list.at(c): ', [QandA_list.at(c)].filter(NonEmptyVals_toKeep).join(' '));
 				c =+ 1;
 			}
 			return `btn${c}`;
