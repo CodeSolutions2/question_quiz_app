@@ -105,12 +105,17 @@ async function Next() {
 		// Advance to a new text
 		count += 1;
 		cur_ind = count;
+
+		if (count == btns_selected.length) {
+			document.getElementById(`${btns_selected.at(cur_ind)}`).style.background = '#d4d4d4'; // Reset button color
+		}
+		
 		await load_a_test(x_rand.at(count));
 	} else {
 		// change button color back to original
 		console.log('load_a_test - btns_selected.at(cur_ind) : ', `${btns_selected.at(cur_ind)}`);
 		document.getElementById(`${btns_selected.at(cur_ind)}`).style.background = '#d4d4d4'; // Reset button color
-		
+	
 		cur_ind = cur_ind + 1;
 		await load_a_test(x_rand.at(cur_ind));
 	}
@@ -119,10 +124,11 @@ async function Next() {
 // ----------------------------------------------------
 
 async function Previous() {
-
-  // change button color back to original
-  console.log('load_a_test - btns_selected.at(cur_ind) : ', `${btns_selected.at(cur_ind)}`);
+	
+	// change button color back to original
+	console.log('load_a_test - btns_selected.at(cur_ind) : ', `${btns_selected.at(cur_ind)}`);
 	document.getElementById(`${btns_selected.at(cur_ind)}`).style.background = '#d4d4d4'; // Reset button color
+	document.getElementById("notification").innerHTML = "";
   
 	cur_ind = cur_ind - 1;
 	await load_a_test(x_rand.at(cur_ind));
