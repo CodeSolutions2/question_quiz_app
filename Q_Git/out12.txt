@@ -1,0 +1,6 @@
+Why would the following command be used? git rebase -i HEAD~10
+To run a comparative search of the last 10 commits for differences
+To list the last 10 commits and modify them with either the squash or fixup command
+To delete the last 10 commits and reset the HEAD
+In order to locally cache the last 10 commits
+To list the last 10 commits and modify them with either the squash or fixup command
