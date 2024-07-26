@@ -249,8 +249,8 @@ async function load_a_test(q_num) {
 		await start_listening_for_user_clicks();
 	} else {
 		// Display the btn that was previously selected
-		console.log('btns_selected: ', btns_selected);
-		console.log('load_a_test - btns_selected.at(cur_ind) : ', `${btns_selected.at(cur_ind)}`);
+		// console.log('btns_selected: ', btns_selected);
+		// console.log('load_a_test - btns_selected.at(cur_ind) : ', `${btns_selected.at(cur_ind)}`);
 
 		if (btns_selected.at(cur_ind) == A_btn_id.at(cur_ind)) {
 			document.getElementById(`${btns_selected.at(cur_ind)}`).style.background = '#5f9341';
@@ -258,6 +258,8 @@ async function load_a_test(q_num) {
 			document.getElementById(`${A_btn_id.at(cur_ind)}`).style.background = '#5f9341';
 			document.getElementById(`${btns_selected.at(cur_ind)}`).style.background = '#fa7573';
 		}
+
+		if (cur_ind == num_of_q-1 && count == num_of_q-1) { document.getElementById("Next").style.display = "none"; }
 	}
 }
 
