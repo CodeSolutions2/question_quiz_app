@@ -193,6 +193,7 @@ async function load_a_test(q_num) {
 	// console.log('QandA_list.length: ', QandA_list.length);
 
 	num_of_btns = QandA_list.length - 1; // it is minus 1 to account for the A at the end
+	console.log('num_of_btns: ', num_of_btns);
 	
 	var temp = QandA_list.map((x, ind) => {
 		// console.log('ind: ', ind);
@@ -201,11 +202,13 @@ async function load_a_test(q_num) {
 			return '';
 		} else {
 			// Return the button Id of the Answer
-			A = QandA_list.at(num_of_btns);
+			A = QandA_list.at(num_of_btns).filter(NonEmptyVals_toKeep).join(' ');
 			console.log('A: ', A);
 			
 			var c = 0;
-			while (QandA_list.at(c) != A && c < num_of_btns) {
+			while (QandA_list.at(c).filter(NonEmptyVals_toKeep).join(' ') != A && c < num_of_btns) {
+				console.log('c: ', c);
+				console.log('QandA_list.at(c): ', QandA_list.at(c).filter(NonEmptyVals_toKeep).join(' '));
 				c =+ 1;
 			}
 			return `btn${c}`;
