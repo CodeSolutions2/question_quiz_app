@@ -179,6 +179,9 @@ async function Restart() {
 	// Reinitialize default screen
 	var initial_btn_list = ["Question 0", "Question 1", "Question 2", "Question 3"];
 	initial_btn_list.map((x, ind) => { document.getElementById(`btn${ind}`).innerText = x; return ''; });
+
+	document.getElementById(`${btns_selected.at(cur_ind)}`).style.background = '#d4d4d4'; // Reset button color
+	document.getElementById(`${A_btn_id.at(cur_ind)}`).style.background = '#d4d4d4'; // Reset button color
 }
 	
 // ----------------------------------------------------
@@ -339,7 +342,7 @@ async function processEvent(event) {
 		document.getElementById("notification").innerHTML += "Total score: " + score + "<br>";
 		document.getElementById("notification").innerHTML += "Average response time: " + mean_response_time + ". Please click Restart to practice again, or review responses with the Next and Previous buttons.";
 		
-		document.getElementById("Next").style.display = "none";
+		document.getElementById("Next").style.display = "block";
 		document.getElementById("Previous").style.display = "block";
 		document.getElementById("Restart").style.display = "block";
 	}
