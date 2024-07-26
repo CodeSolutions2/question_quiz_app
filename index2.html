@@ -6,7 +6,7 @@
 
 <h1>Question quiz webapp</h1>
 <ol type="A">
-	<li>Enter a foldername.</li>
+	<li>Enter a foldername. (ie: Q_Git)</li>
 	<li>Click Start to begin a practice session.</li>
 </ol>
     <input id="foldername" type="text" value="" placeholder="foldername" rows="10" cols="100" style="display:block; text-align: left; width: 150px;">
@@ -54,13 +54,13 @@ window.addEventListener('beforeunload', function() {
 	
 // ----------------------------------------------------
 
-// const foldername = "Q_Git";
 const repo_name = "question_quiz_app";
 const repoOwner = "CodeSolutions2";
 const branchName = "main";
 
 const NonEmptyVals_toKeep = (x) => x.length != 0;
 
+var foldername = '';
 var file_obj = {};
 var A = "";
 var score = 0;
@@ -78,9 +78,11 @@ async function Start() {
 
 	document.getElementById("Start").style.display = "none";
 	document.getElementById("foldername").style.display = "none";
+
+	foldername = document.getElementById("foldername").value;
 	
 	// Initially load the questions from the repository
-	file_obj = await GET_fileobjects_for_a_folder(repoOwner, repo_name, document.getElementById("foldername").value, branchName);
+	file_obj = await GET_fileobjects_for_a_folder(repoOwner, repo_name, foldername, branchName);
 	console.log('file_obj: ', file_obj);
 
 	num_of_q = file_obj.length ;
