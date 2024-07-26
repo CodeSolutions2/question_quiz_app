@@ -205,13 +205,19 @@ async function load_a_test(q_num) {
 			A = [QandA_list.at(num_of_btns)].filter(NonEmptyVals_toKeep).join(' ');
 			console.log('A: ', A);
 			
-			var c = 0;
-			while ([QandA_list.at(c)].filter(NonEmptyVals_toKeep).join(' ') != A && c < num_of_btns) {
-				console.log('c: ', c);
-				console.log('QandA_list.at(c): ', [QandA_list.at(c)].filter(NonEmptyVals_toKeep).join(' '));
-				c =+ 1;
+			// var i = 0;
+			// while ([QandA_list.at(i)].filter(NonEmptyVals_toKeep).join(' ') != A && i < num_of_btns) {
+			//	console.log('i: ', i);
+			//	console.log('QandA_list.at(i): ', [QandA_list.at(i)].filter(NonEmptyVals_toKeep).join(' '));
+			//	i =+ 1;
+			// }
+			// OR
+			for (let i=0; i<num_of_btns; i++) {
+				if ([QandA_list.at(i)].filter(NonEmptyVals_toKeep).join(' ') == A) {
+					var out = i;
+				}
 			}
-			return `btn${c}`;
+			return `btn${out}`;
 		}
 	});
 	
@@ -303,17 +309,14 @@ async function processEvent(event) {
 	// ----------------------------------------------------
 	
 	// Evaluate if user_click matches the answer
-	
-	// Ensure no spaces
-	// var user_click = document.getElementById(user_click_btn_id).textContent.split(' ').filter(NonEmptyVals_toKeep).join(' ');
-	// A = A.split(' ').filter(NonEmptyVals_toKeep).join(' ');
-	
-	// if (user_click == A) {
 	if (A_btn_id.at(count) == user_click_btn_id) {
-		document.getElementById("notification").innerHTML = "Correct.";
+		document.getElementById("notification").innerHTML = "Correct."<br>;
+		document.getElementById(`${user_click_btn_id}`).style.background = '#5f9341';
 		score += 1;
 	} else {
-		document.getElementById("notification").innerHTML = "Incorrect. Answer: " + A;
+		document.getElementById("notification").innerHTML = "Incorrect."<br>;
+		document.getElementById(`${A_btn_id.at(count)}`).style.background = '#5f9341';
+		document.getElementById(`${user_click_btn_id}`).style.background = '#fa7573';
 	}
 	var etime = await elapsedTime(startTime, endTime)
 	document.getElementById("notification").innerHTML += "\nResponse Time: " + etime;
