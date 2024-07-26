@@ -131,12 +131,14 @@ async function Next() {
 // ----------------------------------------------------
 
 async function Previous() {
-	
+
+	document.getElementById("notification").innerHTML = "";
+
+	// Remove any old highlighting, so new highlighting can be applied
 	// change button color back to original
-	console.log('load_a_test - btns_selected.at(cur_ind) : ', `${btns_selected.at(cur_ind)}`);
+	// console.log('load_a_test - btns_selected.at(cur_ind) : ', `${btns_selected.at(cur_ind)}`);
 	document.getElementById(`${btns_selected.at(cur_ind)}`).style.background = '#d4d4d4'; // Reset button color
 	document.getElementById(`${A_btn_id.at(cur_ind)}`).style.background = '#d4d4d4'; // Reset button color
-	document.getElementById("notification").innerHTML = "";
   
 	cur_ind = cur_ind - 1;
 	await load_a_test(x_rand.at(cur_ind));
@@ -324,8 +326,8 @@ async function processEvent(event) {
 		document.getElementById(`${user_click_btn_id}`).style.background = '#fa7573';
 	}
 	var etime = await elapsedTime(startTime, endTime)
-	document.getElementById("notification").innerHTML += "\nResponse Time: " + etime;
-	document.getElementById("notification").innerHTML += "\nTotal score: " + score;
+	document.getElementById("notification").innerHTML += "Response Time: " + etime + "<br>";
+	document.getElementById("notification").innerHTML += ", Total score: " + score;
 	responseTime.push(etime);
 	
 	// ----------------------------------------------------
@@ -334,11 +336,11 @@ async function processEvent(event) {
 	if (x_rand.length-1 == count) {
 		var mean_response_time = responseTime.reduce((sum,x) => sum+x, 0) / num_of_q;
 		
-		document.getElementById("notification").innerHTML += "Total score: " + score;
-		document.getElementById("notification").innerHTML += "\nAverage response time: " + mean_response_time + ". Please click Restart to practice again.";
+		document.getElementById("notification").innerHTML += "Total score: " + score + "<br>";
+		document.getElementById("notification").innerHTML += "Average response time: " + mean_response_time + ". Please click Restart to practice again, or review responses with the Next and Previous buttons.";
 		
 		document.getElementById("Next").style.display = "none";
-		document.getElementById("Previous").style.display = "none";
+		document.getElementById("Previous").style.display = "block";
 		document.getElementById("Restart").style.display = "block";
 	}
 	
