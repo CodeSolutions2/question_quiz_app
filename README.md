@@ -10,4 +10,4 @@ The objective of this work was to create a Computer or web application that can 
 
 ## Version 1: JavaScript
 
-[question_quiz_app] https://CodeSolutions2.github.io/question_quiz_app/index2.html
+[question_quiz_app] https://CodeSolutions2.github.io/question_quiz_app/index3.html
