@@ -138,6 +138,12 @@ async function Next() {
 // ----------------------------------------------------
 
 async function Previous() {
+
+	if (x_rand.length-1 == cur_ind) {
+		// Remove Restart and add Next
+		document.getElementById("Restart").style.display = "none";
+		document.getElementById("Next").style.display = "block";
+	}
 	
 	document.getElementById(`${btns_selected.at(cur_ind)}`).style.background = '#d4d4d4'; // Reset button color
 	document.getElementById(`${A_btn.at(cur_ind)}`).style.background = '#d4d4d4'; // gray
