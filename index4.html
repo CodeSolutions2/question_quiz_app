@@ -102,7 +102,10 @@ async function Start() {
 	file_obj = await GET_fileobjects_for_a_folder(repoOwner, repo_name, foldername, branchName);
 	console.log('file_obj: ', file_obj);
 
-	num_of_q = file_obj.length ;
+	num_of_q = file_obj.length;
+
+	// Update user about the total number of questions
+	document.getElementById("label_for_quiz_completion").innerHTML = `Quiz completion (${num_of_q} questions):`;
 
 	var x = await Array.from({ length: num_of_q }, (_, ind) => ind);
 	// console.log('x: ', x);
@@ -203,7 +206,7 @@ async function load_a_test(q_num) {
 	var QandA_list = text.split('\n').filter(NonEmptyVals_toKeep);
 	// console.log('QandA_list: ', QandA_list);
 	
-	document.getElementById("Q").innerHTML = "Q: " + QandA_list.shift();
+	document.getElementById("Q").innerHTML = `Q${cur_ind}: ` + QandA_list.shift();
 
 	// console.log('QandA_list.length: ', QandA_list.length);
 
@@ -252,12 +255,24 @@ async function load_a_test(q_num) {
 			document.getElementById(`${btns_selected.at(cur_ind)}`).style.background = '#eb5e5e'; // red
 		}
 
+		// At the first question
 		if (cur_ind == 0) {
 			// Hide Previous button
 			document.getElementById("Previous").style.display = "none";
 		} else {
 			if (document.getElementById("Previous").style.display == "none") {
 				document.getElementById("Previous").style.display = "block";
+			}
+		}
+
+		// At the last question
+		if (cur_ind == x_rand.length-1) {
+			// Hide Next button
+			document.getElementById("Next").style.display = "none";
+			document.getElementById("Restart").style.display = "block";
+		} else {
+			if (document.getElementById("Next").style.display == "none") {
+				document.getElementById("Next").style.display = "block";
 			}
 		}
 	}
@@ -351,7 +366,7 @@ async function processEvent(event) {
 	// ----------------------------------------------------
   
 	// Evaluate progress of Quiz completion
-	document.getElementById("completion").value = 100 * (count/num_of_q);
+	document.getElementById("completion").value = 100 * Math.round(count/num_of_q);
 	
 	// ----------------------------------------------------
 	
