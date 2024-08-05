@@ -72,12 +72,9 @@ var file_obj = {};
 async function Start() {
 
 	// Initialize variables
-	var file_obj = {};
 	var A = "";
 	var score = 0;
-	var num_of_q = 0;
 	var num_of_btns = 0;
-	var x_rand = [];
 	var count = 0;
 	var cur_ind = 0;
 	var responseTime = [];
@@ -101,10 +98,10 @@ async function Start() {
 	document.getElementById("btn3").style.display = "block";
 	
 	// Initially load the questions from the repository
-	file_obj = await GET_fileobjects_for_a_folder(repoOwner, repo_name, foldername, branchName);
+	var file_obj = await GET_fileobjects_for_a_folder(repoOwner, repo_name, foldername, branchName);
 	console.log('file_obj: ', file_obj);
 
-	num_of_q = file_obj.length;
+	var num_of_q = file_obj.length;
 
 	// Update user about the total number of questions
 	document.getElementById("label_for_quiz_completion").innerHTML = `Quiz completion (${num_of_q} questions):`;
@@ -112,7 +109,7 @@ async function Start() {
 	var x = await Array.from({ length: num_of_q }, (_, ind) => ind);
 	// console.log('x: ', x);
 		
-	x_rand = await rand_perm(x);
+	var x_rand = await rand_perm(x);
 	console.log('x_rand: ', x_rand);
 
 	// Show the first question
