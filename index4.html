@@ -117,7 +117,9 @@ async function Next() {
 		cur_ind = count;
 		await load_a_test(x_rand.at(count));
 	} else {
-		// document.getElementById(`${btns_selected.at(cur_ind)}`).style.background = '#d4d4d4'; // Reset button color
+		// Reset button color
+		document.getElementById(`${btns_selected.at(cur_ind)}`).style.background = '#d4d4d4'; // gray
+		
 		// use the previous button and are advancing to text already viewed
 		await load_a_test(x_rand.at(cur_ind));
 		cur_ind = cur_ind + 1;
@@ -311,6 +313,9 @@ async function processEvent(event) {
 
 		// Incorrect response
 		document.getElementById(`${btns_selected.at(cur_ind)}`).style.background = '#eb5e5e'; // red
+
+		// Correct response
+		document.getElementById(`${A_btn.at(cur_ind)}`).style.background = '#5f9341'; // green
 	}
 	var etime = await elapsedTime(startTime, endTime)
 	document.getElementById("notification").innerHTML += "\nResponse Time: " + etime;
