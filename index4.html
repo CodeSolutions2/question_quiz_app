@@ -110,6 +110,9 @@ async function Start() {
 // ----------------------------------------------------
 
 async function Next() {
+
+	// Reset button color
+	document.getElementById(`${btns_selected.at(cur_ind)}`).style.background = '#d4d4d4'; // gray
 	
 	if (cur_ind == count) {
 		// Advance to a new text
@@ -117,9 +120,6 @@ async function Next() {
 		cur_ind = count;
 		await load_a_test(x_rand.at(count));
 	} else {
-		// Reset button color
-		document.getElementById(`${btns_selected.at(cur_ind)}`).style.background = '#d4d4d4'; // gray
-		
 		// use the previous button and are advancing to text already viewed
 		await load_a_test(x_rand.at(cur_ind));
 		cur_ind = cur_ind + 1;
@@ -130,7 +130,7 @@ async function Next() {
 
 async function Previous() {
 	
-	// document.getElementById(`${btns_selected.at(cur_ind)}`).style.background = '#d4d4d4'; // Reset button color
+	document.getElementById(`${btns_selected.at(cur_ind)}`).style.background = '#d4d4d4'; // Reset button color
 	cur_ind = cur_ind - 1;
 	await load_a_test(x_rand.at(cur_ind));
 }
