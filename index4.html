@@ -207,6 +207,8 @@ async function load_a_test(q_num) {
 	 A = A.filter(NonEmptyVals_toKeep).at(0);
 	// console.log('A: ', A);
 
+	console.log('load_a_test - A_btn: ', A_btn);
+	
 	// ----------------------------------------------------
 
 	// Make a response
@@ -286,7 +288,8 @@ async function processEvent(event) {
 	// btns_selected.push(user_click_btn_id);
 	// OR
 	btns_selected.push(this.getAttribute("id"));
-
+	console.log('processEvent - btns_selected: ', btns_selected);
+	
 	// ----------------------------------------------------
 	
 	// User clicked, so can stop listening for a response
