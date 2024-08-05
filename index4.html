@@ -366,7 +366,7 @@ async function processEvent(event) {
 	// ----------------------------------------------------
   
 	// Evaluate progress of Quiz completion
-	document.getElementById("completion").value = 100 * Math.round(count/num_of_q);
+	document.getElementById("completion").value = Math.round(100 * count/num_of_q);
 	
 	// ----------------------------------------------------
 	
