@@ -235,6 +235,15 @@ async function load_a_test(q_num) {
 			// Incorrect response
 			document.getElementById(`${btns_selected.at(cur_ind)}`).style.background = '#eb5e5e'; // red
 		}
+
+		if (cur_ind == 0) {
+			// Hide Previous button
+			document.getElementById("Previous").style.display = "none";
+		} else {
+			if (document.getElementById("Previous").style.display == "none") {
+				document.getElementById("Previous").style.display = "block";
+			}
+		}
 	}
 }
 
