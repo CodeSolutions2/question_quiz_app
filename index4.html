@@ -206,7 +206,7 @@ async function load_a_test(q_num) {
 	
 	for (var i=0; i < num_of_btns; i++) {
 		if (cur_ind == count && QandA_list.at(i).split(' ').filter(NonEmptyVals_toKeep).join(' ') == A_clean) {
-			A_btn.push(`btn${ind}`);
+			A_btn.push(`btn${i}`);
 		}
 	}
 
