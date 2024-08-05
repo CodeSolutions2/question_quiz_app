@@ -113,6 +113,7 @@ async function Next() {
 
 	// Reset button color
 	document.getElementById(`${btns_selected.at(cur_ind)}`).style.background = '#d4d4d4'; // gray
+	document.getElementById(`${A_btn.at(cur_ind)}`).style.background = '#d4d4d4'; // gray
 	
 	if (cur_ind == count) {
 		// Advance to a new text
@@ -131,6 +132,8 @@ async function Next() {
 async function Previous() {
 	
 	document.getElementById(`${btns_selected.at(cur_ind)}`).style.background = '#d4d4d4'; // Reset button color
+	document.getElementById(`${A_btn.at(cur_ind)}`).style.background = '#d4d4d4'; // gray
+	
 	cur_ind = cur_ind - 1;
 	await load_a_test(x_rand.at(cur_ind));
 }
