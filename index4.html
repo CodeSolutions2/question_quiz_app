@@ -82,10 +82,16 @@ var foldername = "";
 async function Start() {
 
 	foldername = document.getElementById("quiz_app_folderORurl").value;
-	
+
+	// Start button is removed
 	document.getElementById("Start").style.display = "none";
+
+	// input area is removed
 	document.getElementById("quiz_app_folderORurl").style.display = "none";
-	document.getElementById("label_for_quiz_completion").style.display = "none";
+
+	// Progress bar and buttons appear
+	document.getElementById("label_for_quiz_completion").style.display = "block";
+	document.getElementById("completion").style.display = "block";
 
 	document.getElementById("btn0").style.display = "block";
 	document.getElementById("btn1").style.display = "block";
@@ -165,7 +171,8 @@ async function Restart() {
 	document.getElementById("Restart").style.display = "none";
 
 	document.getElementById("quiz_app_folderORurl").style.display = "block";
-	document.getElementById("label_for_quiz_completion").style.display = "block";
+	document.getElementById("label_for_quiz_completion").style.display = "none";
+	document.getElementById("completion").style.display = "none";
 
 	document.getElementById("btn0").style.display = "none";
 	document.getElementById("btn1").style.display = "none";
@@ -335,21 +342,21 @@ async function processEvent(event) {
 	document.getElementById("notification").innerHTML += "\nTotal score: " + score;
 	responseTime.push(etime);
 
-  // ----------------------------------------------------
+	// ----------------------------------------------------
   
-  // Evaluate progress of Quiz completion
-  document.getElementById("completion").value = 100 * (count/num_of_q);
+	// Evaluate progress of Quiz completion
+	document.getElementById("completion").value = 100 * (count/num_of_q);
 	
 	// ----------------------------------------------------
 	
 	// Detection that questions are finished
 	if (x_rand.length-1 == count) {
 		var mean_response_time = responseTime.reduce((sum,x) => sum+x, 0) / num_of_q;
-		document.getElementById("notification").innerHTML += "Total score: " + score;
-		document.getElementById("notification").innerHTML += "\nAverage response time: " + mean_response_time + ". Please click Restart to practice again.";
+		document.getElementById("notification").innerHTML = "Total score: " + score + "<br>";
+		document.getElementById("notification").innerHTML += "Average response time: " + mean_response_time + ". Please click Restart to practice again.";
 		
 		document.getElementById("Next").style.display = "none";
-		document.getElementById("Previous").style.display = "none";
+		document.getElementById("Previous").style.display = "block";
 		document.getElementById("Restart").style.display = "block";
 	}
 	
