@@ -6,13 +6,13 @@
 
 <h1>Question Quiz Webapp</h1>
 <ul>
-  <li>Enter the folder or url of the test questions, in the textarea.</li>
+  <li>Enter the folder or url of the test questions in the input (ie: Q_Git, Q_Azure).</li>
   <li>Click on the Start button to begin the test.</li>
 </ul>
 
-<input type="text" name="" id="quiz_app_folderORurl" value="" style="display:block;">
+<input type="text" name="" id="quiz_app_folderORurl" value="" placeholder="Q_Git or Q_Azure" style="display:block;">
   
-  <label for="file" style="display:none">Quiz completion:</label><progress id="completion" max="100" value="0" style="display:none">0%</progress>
+  <label for="file" id="label_for_quiz_completion" style="display:none">Quiz completion:</label><progress id="completion" max="100" value="0" style="display:none">0%</progress>
   
     <div id="Q"></div>
     <div id="Qbtns" class="QuestionbuttonContainer">
@@ -58,7 +58,6 @@ window.addEventListener('beforeunload', function() {
 	
 // ----------------------------------------------------
 
-const foldername = "Q_Git";
 const repo_name = "question_quiz_app";
 const repoOwner = "CodeSolutions2";
 const branchName = "main";
@@ -80,7 +79,16 @@ var btns_selected = []
 
 async function Start() {
 
+	const foldername = document.getElementById("quiz_app_folderORurl").value;
+	
 	document.getElementById("Start").style.display = "none";
+	document.getElementById("quiz_app_folderORurl").style.display = "none";
+	document.getElementById("label_for_quiz_completion").style.display = "none";
+
+	document.getElementById("btn0").style.display = "block";
+	document.getElementById("btn1").style.display = "block";
+	document.getElementById("btn2").style.display = "block";
+	document.getElementById("btn3").style.display = "block";
 	
 	// Initially load the questions from the repository
 	file_obj = await GET_fileobjects_for_a_folder(repoOwner, repo_name, foldername, branchName);
@@ -151,6 +159,8 @@ async function Restart() {
 						
 async function load_a_test(q_num) {
 
+	const foldername = document.getElementById("quiz_app_folderORurl").value;
+	
 	// Display text on buttons
 	var text = await GET_repo_file_info_RESTAPI_fast(repoOwner, repo_name, branchName, foldername, file_obj[q_num].name);
 	// console.log('text: ', text);
