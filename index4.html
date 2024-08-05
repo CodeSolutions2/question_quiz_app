@@ -188,6 +188,9 @@ async function Restart() {
 	document.getElementById("btn2").style.display = "none";
 	document.getElementById("btn3").style.display = "none";
 
+	document.getElementById("Q").innerHTML = "";
+	document.getElementById("notification").innerHTML = "";
+
 	// Reinitialize default screen
 	var initial_btn_list = ["Question 0", "Question 1", "Question 2", "Question 3"];
 	initial_btn_list.map((x, ind) => { document.getElementById(`btn${ind}`).innerText = x; return ''; });
@@ -372,6 +375,8 @@ async function processEvent(event) {
 	
 	// Detection that questions are finished
 	if (x_rand.length-1 == count) {
+		document.getElementById("completion").value = 100; // Ensure that progress bar is 100%
+		
 		var mean_response_time = responseTime.reduce((sum,x) => sum+x, 0) / num_of_q;
 		document.getElementById("notification").innerHTML = "Total score: " + score + "<br>";
 		document.getElementById("notification").innerHTML += "Average response time: " + mean_response_time + ". Please click Restart to practice again.";
