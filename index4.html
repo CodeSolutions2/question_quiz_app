@@ -64,22 +64,23 @@ const branchName = "main";
 
 const NonEmptyVals_toKeep = (x) => x.length != 0;
 
-var file_obj = {};
-var A = "";
-var score = 0;
-var num_of_q = 0;
-var num_of_btns = 0;
-var x_rand = [];
-var count = 0;
-var cur_ind = 0;
-var responseTime = [];
-var btns_selected = [];
-var A_btn = [];
-var foldername = "";
-
 // ----------------------------------------------------
 
 async function Start() {
+
+	// Initialize variables
+	var file_obj = {};
+	var A = "";
+	var score = 0;
+	var num_of_q = 0;
+	var num_of_btns = 0;
+	var x_rand = [];
+	var count = 0;
+	var cur_ind = 0;
+	var responseTime = [];
+	var btns_selected = [];
+	var A_btn = [];
+	var foldername = "";
 
 	foldername = document.getElementById("quiz_app_folderORurl").value;
 
