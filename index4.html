@@ -65,8 +65,8 @@ const branchName = "main";
 const NonEmptyVals_toKeep = (x) => x.length != 0;
 
 var foldername;
-var file_obj = {};
-
+var file_array = [];
+	
 // ----------------------------------------------------
 
 async function Start() {
@@ -98,10 +98,10 @@ async function Start() {
 	document.getElementById("btn3").style.display = "block";
 	
 	// Initially load the questions from the repository
-	var file_obj = await GET_fileobjects_for_a_folder(repoOwner, repo_name, foldername, branchName);
-	console.log('file_obj: ', file_obj);
+	var file_array = await GET_fileobjects_for_a_folder(repoOwner, repo_name, foldername, branchName);
+	console.log('file_array: ', file_array);
 
-	var num_of_q = file_obj.length;
+	var num_of_q = file_array.length;
 
 	// Update user about the total number of questions
 	document.getElementById("label_for_quiz_completion").innerHTML = `Quiz completion (${num_of_q} questions):`;
@@ -159,7 +159,7 @@ async function Previous() {
 async function Restart() {
 
 	// Reinitialize variables
-	var file_obj = {};
+	var file_array = {};
 	var A = "";
 	var score = 0;
 	var num_of_q = 0;
@@ -202,7 +202,16 @@ async function load_a_test(q_num) {
 	console.log('q_num: ', q_num);
 	
 	// Display text on buttons
-	var text = await GET_repo_file_info_RESTAPI_fast(repoOwner, repo_name, branchName, foldername, file_obj.at(q_num).name);
+	console.log('file_array: ', file_array);
+
+	console.log('file_array[q_num] : ', file_array[q_num]);
+	console.log('file_array.at(q_num) : ', file_array.at(q_num));
+	
+	// var object_name = 
+	
+	var filename = file_array.at(q_num).name;
+	
+	var text = await GET_repo_file_info_RESTAPI_fast(repoOwner, repo_name, branchName, foldername, filename);
 	// console.log('text: ', text);
 	
 	var QandA_list = text.split('\n').filter(NonEmptyVals_toKeep);
