@@ -75,12 +75,13 @@ var cur_ind = 0;
 var responseTime = [];
 var btns_selected = [];
 var A_btn = [];
+var foldername = "";
 
 // ----------------------------------------------------
 
 async function Start() {
 
-	const foldername = document.getElementById("quiz_app_folderORurl").value;
+	foldername = document.getElementById("quiz_app_folderORurl").value;
 	
 	document.getElementById("Start").style.display = "none";
 	document.getElementById("quiz_app_folderORurl").style.display = "none";
@@ -143,13 +144,18 @@ async function Previous() {
 async function Restart() {
 
 	// Reinitialize variables
+	var file_obj = {};
 	var A = "";
 	var score = 0;
 	var num_of_q = 0;
+	var num_of_btns = 0;
 	var x_rand = [];
 	var count = 0;
 	var cur_ind = 0;
+	var responseTime = [];
+	var btns_selected = [];
 	var A_btn = [];
+	var foldername = "";
 
 	// Reinitialize usage buttons
 	document.getElementById("Start").style.display = "block";
@@ -174,7 +180,7 @@ async function Restart() {
 						
 async function load_a_test(q_num) {
 
-	const foldername = document.getElementById("quiz_app_folderORurl").value;
+	console.log('q_num: ', q_num);
 	
 	// Display text on buttons
 	var text = await GET_repo_file_info_RESTAPI_fast(repoOwner, repo_name, branchName, foldername, file_obj[q_num].name);
