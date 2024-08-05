@@ -122,9 +122,10 @@ async function Next() {
 		cur_ind = count;
 		await load_a_test(x_rand.at(count));
 	} else {
+		cur_ind = cur_ind + 1;
+		
 		// use the previous button and are advancing to text already viewed
 		await load_a_test(x_rand.at(cur_ind));
-		cur_ind = cur_ind + 1;
 	}
 }
 
