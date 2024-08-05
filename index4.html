@@ -205,7 +205,7 @@ async function load_a_test(q_num) {
 	console.log('q_num: ', q_num);
 	
 	// Display text on buttons
-	var text = await GET_repo_file_info_RESTAPI_fast(repoOwner, repo_name, branchName, foldername, file_obj[q_num].name);
+	var text = await GET_repo_file_info_RESTAPI_fast(repoOwner, repo_name, branchName, foldername, file_obj.at(q_num).name);
 	// console.log('text: ', text);
 	
 	var QandA_list = text.split('\n').filter(NonEmptyVals_toKeep);
