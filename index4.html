@@ -211,23 +211,19 @@ async function load_a_test(q_num) {
 	// console.log('A: ', A);
 
 	// ----------------------------------------------------
-	
-	var A_clean = A.split(' ').filter(NonEmptyVals_toKeep).join(' ');
-	
-	for (var i=0; i < num_of_btns; i++) {
-		if (cur_ind == count && QandA_list.at(i).split(' ').filter(NonEmptyVals_toKeep).join(' ') == A_clean) {
-			A_btn.push(`btn${i}`);
-		}
-	}
-
-	console.log('load_a_test - A_btn: ', A_btn);
-	
-	// ----------------------------------------------------
 
 	// Make a response
 	console.log('count: ', count);
 	console.log('cur_ind: ', cur_ind);
-	if (cur_ind == count) {
+	if (cur_ind == count && cur_ind == A_btn.length) {
+		// Save the correct Answer to the Answer list
+		for (var i=0; i < num_of_btns; i++) {
+			if (QandA_list.at(i).split(' ').filter(NonEmptyVals_toKeep).join(' ') == A.split(' ').filter(NonEmptyVals_toKeep).join(' ')) {
+				A_btn.push(`btn${i}`);
+			}
+		}
+		console.log('A_btn: ', A_btn);
+
 		// Start eventListener to wait for a button push
 		await start_listening_for_user_clicks();
 	} else {
@@ -306,9 +302,6 @@ async function processEvent(event) {
 	// ----------------------------------------------------
 	
 	// When the user clicks a button, save the value
-	// const user_click_btn_id = this.getAttribute("id");
-	// btns_selected.push(user_click_btn_id);
-	// OR
 	btns_selected.push(this.getAttribute("id"));
 	console.log('processEvent - btns_selected: ', btns_selected);
 	
@@ -322,11 +315,6 @@ async function processEvent(event) {
 	// Evaluate if user_click matches the answer
 	
 	// Ensure no spaces
-	// var user_click = document.getElementById(user_click_btn_id).textContent.split(' ').filter(NonEmptyVals_toKeep).join(' ');
-	// A = A.split(' ').filter(NonEmptyVals_toKeep).join(' ');
-			
-	// if (user_click == A) {
-	// OR
 	if (A_btn.at(cur_ind) == btns_selected.at(cur_ind)){
 		document.getElementById("notification").innerHTML = "Correct.";
 		
@@ -346,8 +334,6 @@ async function processEvent(event) {
 	document.getElementById("notification").innerHTML += "\nResponse Time: " + etime;
 	document.getElementById("notification").innerHTML += "\nTotal score: " + score;
 	responseTime.push(etime);
-	
-	// A = "";
 
   // ----------------------------------------------------
   
@@ -371,30 +357,10 @@ async function processEvent(event) {
 	
 // ----------------------------------------------------
 
-// async function start_one_eventlister(val) {
-     	// document.getElementById(`btn${val}`).addEventListener("click", processEvent, false);
-// }
-
-// ----------------------------------------------------
-
-// async function stop_one_eventlister(val) {
-     	// document.getElementById(`btn${val}`).removeEventListener("click", processEvent, false);
-// }
-
-// -------------------------------------------------
-
 async function start_listening_for_user_clicks() {
 	
 	startTime = await currentTime();
 	
-	// await start_one_eventlister(0)
-	// 	.then(async function() { await start_one_eventlister(1); })
-	// 	.then(async function() { await start_one_eventlister(2); })
-	// 	.then(async function() { await start_one_eventlister(3); })
-	// 	.then(function() { document.getElementById("notification").innerHTML = 'Please select a response, by clicking on a button.'; document.getElementById("Next").style.display = "none"; });
-
-	// OR
-
 	for (let i=0; i<num_of_btns; i++) {
 	 	document.getElementById(`btn${i}`).addEventListener("click", processEvent, false);
 	} 
@@ -406,15 +372,6 @@ async function start_listening_for_user_clicks() {
 // -------------------------------------------------
 
 async function stop_listening_for_user_clicks() {
-	 
-	// await stop_one_eventlister(0)
-	// 	.then(async function() { await stop_one_eventlister(1); })
-	// 	.then(async function() { await stop_one_eventlister(2); })
-	// 	.then(async function() { await stop_one_eventlister(3); })
-	// 	.then(async () => { await new Promise(r => setTimeout(r, 200)); })
-	// 	.then(function() { document.getElementById("notification").innerHTML = ''; document.getElementById("Next").style.display = "block"; });
-
-	// OR
 
 	for (let i=0; i<num_of_btns; i++) {
 	 	document.getElementById(`btn${i}`).removeEventListener("click", processEvent, false);
