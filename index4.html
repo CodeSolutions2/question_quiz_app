@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html>
+<head></head>
+    
+<body>
+
+<title>Question Quiz Webapp</title>
+<ul>
+  <li>Enter the folder or url of the test questions, in the textarea.</li>
+  <li>Click on the Start button to begin the test.</li>
+</ul>
+
+<input type="text" name="" id="quiz_app_folderORurl" value="" style="display:block;">
+  
+  <label for="file">Quiz completion:</label><progress id="completion" max="100" value="0" style="display:none">0%</progress>
+  
+    <div id="Q"></div>
+    <div id="Qbtns" class="QuestionbuttonContainer">
+        <button id="btn0" class="QbuttonClass" style="display:none">Question 0</button>
+        <button id="btn1" class="QbuttonClass" style="display:none">Question 1</button>
+        <button id="btn2" class="QbuttonClass" style="display:none">Question 2</button>
+        <button id="btn3" class="QbuttonClass" style="display:none">Question 3</button>
+    </div>
+
+    <div id="usebtns" class="UsagebuttonContainer">
+        <button id="Start" onclick="Start()" style="display:block;" class="UsebuttonClass">Start</button>
+        <button id="Next" onclick="Next()" style="display:none;" class="UsebuttonClass">Next</button>
+        <button id="Previous" onclick="Previous()" style="display:none;" class="UsebuttonClass">Previous</button>
+        <button id="Restart" onclick="Restart()" style="display:none;" class="UsebuttonClass">Restart</button>
+      </div>
+  
+<div id="notification"></div>
+<div id="error"></div>
+
+<!-- --------------------------------------------------- -->
+
+<!-- CSS -->
+<style>
+div { padding: 10px; display:block; font-family:courier; font-size:15px; }
+div#notification { position: relative; color: #3236a8; }
+div#error { position: relative; color: #bd1f17; }
+
+.QuestionbuttonContainer { width: 75%; display: flex; flex-direction: column; justify-content: flex-start; flex-wrap: wrap; }
+.QuestionbuttonContainer > .QbuttonClass { width: 400px; height: 48px; font-size: 12px; text-wrap: wrap; background: #d4d4d4 }
+
+.UsagebuttonContainer { width: 75%; display: flex; flex-direction: row; justify-content: flex-start; flex-wrap: wrap; }
+.UsagebuttonContainer > .UsebuttonClass { width: 100px; height: 48px; font-size: 15px; text-wrap: wrap; }
+</style>
+	
+<!-- --------------------------------------------------- -->
+  
+<script>
+
+// Force the page to refresh the cached webpage
+window.addEventListener('beforeunload', function() {
+ 	window.location.href = window.location.href + '?nocache=' + new Date().getTime();
+});
+	
+// ----------------------------------------------------
+
+const foldername = "Q_Git";
+const repo_name = "question_quiz_app";
+const repoOwner = "CodeSolutions2";
+const branchName = "main";
+
+const NonEmptyVals_toKeep = (x) => x.length != 0;
+
+var file_obj = {};
+var A = "";
+var score = 0;
+var num_of_q = 0;
+var num_of_btns = 0;
+var x_rand = [];
+var count = 0;
+var cur_ind = 0;
+var responseTime = [];
+var btns_selected = []
+
+// ----------------------------------------------------
+
+async function Start() {
+
+	document.getElementById("Start").style.display = "none";
+	
+	// Initially load the questions from the repository
+	file_obj = await GET_fileobjects_for_a_folder(repoOwner, repo_name, foldername, branchName);
+	console.log('file_obj: ', file_obj);
+
+	num_of_q = file_obj.length ;
+
+	var x = await Array.from({ length: num_of_q }, (_, ind) => ind);
+	// console.log('x: ', x);
+		
+	x_rand = await rand_perm(x);
+	console.log('x_rand: ', x_rand);
+
+	// Show the first question
+	await load_a_test(x_rand.shift());
+}
+
+// ----------------------------------------------------
+
+async function Next() {
+	
+	if (cur_ind == count) {
+		// Advance to a new text
+		count += 1;
+		cur_ind = count;
+		await load_a_test(x_rand.at(count));
+	} else {
+		// document.getElementById(`${btns_selected.at(cur_ind)}`).style.background = '#d4d4d4'; // Reset button color
+		// use the previous button and are advancing to text already viewed
+		await load_a_test(x_rand.at(cur_ind));
+		cur_ind = cur_ind + 1;
+	}
+}
+
+// ----------------------------------------------------
+
+async function Previous() {
+	
+	// document.getElementById(`${btns_selected.at(cur_ind)}`).style.background = '#d4d4d4'; // Reset button color
+	cur_ind = cur_ind - 1;
+	await load_a_test(x_rand.at(cur_ind));
+}
+
+// ----------------------------------------------------
+
+async function Restart() {
+
+	// Reinitialize variables
+	var A = "";
+	var score = 0;
+	var num_of_q = 0;
+	var x_rand = [];
+	var count = 0;
+	var cur_ind = 0;
+
+	// Reinitialize usage buttons
+	document.getElementById("Start").style.display = "block";
+	document.getElementById("Next").style.display = "none";
+	document.getElementById("Previous").style.display = "none";
+	document.getElementById("Restart").style.display = "none";
+
+	// Reinitialize default screen
+	var initial_btn_list = ["Question 0", "Question 1", "Question 2", "Question 3"];
+	initial_btn_list.map((x, ind) => { document.getElementById(`btn${ind}`).innerText = x; return ''; });
+}
+	
+// ----------------------------------------------------
+						
+async function load_a_test(q_num) {
+
+	// Display text on buttons
+	var text = await GET_repo_file_info_RESTAPI_fast(repoOwner, repo_name, branchName, foldername, file_obj[q_num].name);
+	// console.log('text: ', text);
+	
+	var QandA_list = text.split('\n').filter(NonEmptyVals_toKeep);
+	// console.log('QandA_list: ', QandA_list);
+	
+	document.getElementById("Q").innerHTML = "Q: " + QandA_list.shift();
+
+	// console.log('QandA_list.length: ', QandA_list.length);
+
+	num_of_btns = QandA_list.length - 1; // it is minus 1 to account for the A at the end
+	
+	A = QandA_list.map((x, ind) => {
+		// console.log('ind: ', ind);
+		if (ind < num_of_btns) {
+			document.getElementById(`btn${ind}`).innerText = x;
+			return '';
+		} else {
+			return x;
+		}
+	});
+	
+	 A = A.filter(NonEmptyVals_toKeep).at(0);
+	// console.log('A: ', A);
+
+	// ----------------------------------------------------
+
+	// Make a response
+	console.log('count: ', count);
+	console.log('cur_ind: ', cur_ind);
+	if (cur_ind == count) {
+		// Start eventListener to wait for a button push
+		await start_listening_for_user_clicks();
+	} else {
+		// Display the btn that was previously selected
+		console.log('btns_selected: ', btns_selected);
+		console.log('btns_selected.at(cur_ind) : ', `${btns_selected.at(cur_ind)}`);
+		// document.getElementById(`${btns_selected.at(cur_ind)}`).style.background = '#5f9341';
+
+		// *** Can make a change answer button ***
+	}
+}
+
+// ----------------------------------------------------
+
+async function GET_fileobjects_for_a_folder(repoOwner, repo_name, foldername, branchName) {
+
+	// Using url
+	const url = `https://api.github.com/repos/${repoOwner}/${repo_name}/contents/${foldername}?ref=${branchName}`;
+	// const url = `https://api.github.com/repos/${repoOwner}/${repo_name}/contents`
+	
+	return await fetch(url)
+		.then(res => res.json())
+		.then(async function(data) { return data; })
+		.catch(error => { console.log(error); });
+}
+  
+// ----------------------------------------------------
+  
+async function GET_repo_file_info_RESTAPI_fast(repoOwner, repo_name, branchName, foldername, filename) {
+	
+	// Using download_url
+	return await fetch(`https://raw.githubusercontent.com/${repoOwner}/${repo_name}/${branchName}/${foldername}/${filename}`)
+		.then(res => res.text())
+		.then(async function (text_out) { return  text_out; })
+		.catch(error => { console.log(error); });
+}
+
+// ----------------------------------------------------
+
+async function get_number(x) { return x[Math.round(x.length*Math.random())-1]; }
+	  
+async function rand_perm(x) {
+
+	var out = [];
+	while (out.length != x.length) {
+		out = await get_number(x).then(async function(x_of_y) {
+			if (out.includes(x_of_y) == false && typeof x_of_y != "undefined") { 
+				out.push(x_of_y);
+			}
+			return [... new Set(out)]; // ensure that only unique values are stored in out
+		});
+	}
+	
+	return out;
+	
+}  // end of rand_perm
+
+// ----------------------------------------------------
+
+async function processEvent(event) {
+
+	// ----------------------------------------------------
+	
+	// When the user clicks a button, save the value
+	const user_click_btn_id = this.getAttribute("id");
+	btns_selected.push(user_click_btn_id);
+
+	// ----------------------------------------------------
+	
+	// User clicked, so can stop listening for a response
+	await stop_listening_for_user_clicks();
+	
+	// ----------------------------------------------------
+	
+	// Evaluate if user_click matches the answer
+	
+	// Ensure no spaces
+	var user_click = document.getElementById(user_click_btn_id).textContent.split(' ').filter(NonEmptyVals_toKeep).join(' ');
+	A = A.split(' ').filter(NonEmptyVals_toKeep).join(' ');
+	
+	if (user_click == A) {
+		document.getElementById("notification").innerHTML = "Correct.";
+		score += 1;
+	} else {
+		document.getElementById("notification").innerHTML = "Incorrect. Answer: " + A;
+	}
+	var etime = await elapsedTime(startTime, endTime)
+	document.getElementById("notification").innerHTML += "\nResponse Time: " + etime;
+	document.getElementById("notification").innerHTML += "\nTotal score: " + score;
+	responseTime.push(etime);
+	
+	A = "";
+
+  // ----------------------------------------------------
+  
+  // Evaluate progress of Quiz completion
+  document.getElementById("completion").value = 100 * (count/num_of_q);
+	
+	// ----------------------------------------------------
+	
+	// Detection that questions are finished
+	if (x_rand.length-1 == count) {
+		var mean_response_time = responseTime.reduce((sum,x) => sum+x, 0) / num_of_q;
+		document.getElementById("notification").innerHTML += "Total score: " + score;
+		document.getElementById("notification").innerHTML += "\nAverage response time: " + mean_response_time + ". Please click Restart to practice again.";
+		
+		document.getElementById("Next").style.display = "none";
+		document.getElementById("Previous").style.display = "none";
+		document.getElementById("Restart").style.display = "block";
+	}
+	
+}
+	
+// ----------------------------------------------------
+
+async function start_one_eventlister(val) {
+     	document.getElementById(`btn${val}`).addEventListener("click", processEvent, false);
+}
+
+// ----------------------------------------------------
+
+async function stop_one_eventlister(val) {
+     	document.getElementById(`btn${val}`).removeEventListener("click", processEvent, false);
+}
+
+// -------------------------------------------------
+
+async function start_listening_for_user_clicks() {
+	
+	startTime = await currentTime();
+	
+	// await start_one_eventlister(0)
+	// 	.then(async function() { await start_one_eventlister(1); })
+	// 	.then(async function() { await start_one_eventlister(2); })
+	// 	.then(async function() { await start_one_eventlister(3); })
+	// 	.then(function() { document.getElementById("notification").innerHTML = 'Please select a response, by clicking on a button.'; document.getElementById("Next").style.display = "none"; });
+
+	// OR
+
+	for (let i=0; i<num_of_btns; i++) {
+	 	document.getElementById(`btn${i}`).addEventListener("click", processEvent, false);
+	} 
+	document.getElementById("notification").innerHTML = 'Please select a response, by clicking on a button.';
+	document.getElementById("Next").style.display = "none";
+	if (cur_ind > 0) { document.getElementById("Previous").style.display = "none"; }
+}
+
+// -------------------------------------------------
+
+async function stop_listening_for_user_clicks() {
+	 
+	// await stop_one_eventlister(0)
+	// 	.then(async function() { await stop_one_eventlister(1); })
+	// 	.then(async function() { await stop_one_eventlister(2); })
+	// 	.then(async function() { await stop_one_eventlister(3); })
+	// 	.then(async () => { await new Promise(r => setTimeout(r, 200)); })
+	// 	.then(function() { document.getElementById("notification").innerHTML = ''; document.getElementById("Next").style.display = "block"; });
+
+	// OR
+
+	for (let i=0; i<num_of_btns; i++) {
+	 	document.getElementById(`btn${i}`).removeEventListener("click", processEvent, false);
+	} 
+	document.getElementById("notification").innerHTML = '';
+	document.getElementById("Next").style.display = "block";
+	if (cur_ind > 0) { document.getElementById("Previous").style.display = "block"; }
+	
+	endTime = await currentTime();
+}
+
+// -------------------------------------------------
+
+async function currentTime() { 
+	let date = new Date(); 
+	let hh = date.getHours(); 
+	let mm = date.getMinutes(); 
+	let ss = date.getSeconds();
+	return [hh, mm, ss];
+}
+
+// -------------------------------------------------
+
+async function elapsedTime(startTime, endTime) {
+	return (endTime[0]*60*60 + endTime[1]*60 + endTime[2]) - (startTime[0]*60*60 + startTime[1]*60 + startTime[2]);
+	
+}
+
+// -------------------------------------------------
+	
+</script>
+</body>
+</html>
