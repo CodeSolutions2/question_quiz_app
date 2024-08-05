@@ -190,13 +190,6 @@ async function load_a_test(q_num) {
 		// console.log('ind: ', ind);
 		if (ind < num_of_btns) {
 			document.getElementById(`btn${ind}`).innerText = x;
-			
-			// Only augment button count if it is a new question
-			if (cur_ind == count) {
-				if (x.split(' ').filter(NonEmptyVals_toKeep).join(' ') == A.split(' ').filter(NonEmptyVals_toKeep).join(' ')) {
-					A_btn.push(`btn${ind}`);
-				}
-			}
 			return '';
 		} else {
 			
@@ -206,6 +199,16 @@ async function load_a_test(q_num) {
 	
 	 A = A.filter(NonEmptyVals_toKeep).at(0);
 	// console.log('A: ', A);
+
+	// ----------------------------------------------------
+	
+	var A_clean = A.split(' ').filter(NonEmptyVals_toKeep).join(' ');
+	
+	for (var i=0; i < num_of_btns; i++) {
+		if (cur_ind == count && QandA_list.at(i).split(' ').filter(NonEmptyVals_toKeep).join(' ') == A_clean) {
+			A_btn.push(`btn${ind}`);
+		}
+	}
 
 	console.log('load_a_test - A_btn: ', A_btn);
 	
