@@ -73,7 +73,8 @@ var x_rand = [];
 var count = 0;
 var cur_ind = 0;
 var responseTime = [];
-var btns_selected = []
+var btns_selected = [];
+var A_btn = [];
 
 // ----------------------------------------------------
 
@@ -143,12 +144,21 @@ async function Restart() {
 	var x_rand = [];
 	var count = 0;
 	var cur_ind = 0;
+	var A_btn = [];
 
 	// Reinitialize usage buttons
 	document.getElementById("Start").style.display = "block";
 	document.getElementById("Next").style.display = "none";
 	document.getElementById("Previous").style.display = "none";
 	document.getElementById("Restart").style.display = "none";
+
+	document.getElementById("quiz_app_folderORurl").style.display = "block";
+	document.getElementById("label_for_quiz_completion").style.display = "block";
+
+	document.getElementById("btn0").style.display = "none";
+	document.getElementById("btn1").style.display = "none";
+	document.getElementById("btn2").style.display = "none";
+	document.getElementById("btn3").style.display = "none";
 
 	// Reinitialize default screen
 	var initial_btn_list = ["Question 0", "Question 1", "Question 2", "Question 3"];
@@ -178,8 +188,16 @@ async function load_a_test(q_num) {
 		// console.log('ind: ', ind);
 		if (ind < num_of_btns) {
 			document.getElementById(`btn${ind}`).innerText = x;
+			
+			// Only augment button count if it is a new question
+			if (cur_ind == count) {
+				if (x.split(' ').filter(NonEmptyVals_toKeep).join(' ') == A.split(' ').filter(NonEmptyVals_toKeep).join(' ')) {
+					A_btn.push(`btn${ind}`);
+				}
+			}
 			return '';
 		} else {
+			
 			return x;
 		}
 	});
@@ -199,9 +217,14 @@ async function load_a_test(q_num) {
 		// Display the btn that was previously selected
 		console.log('btns_selected: ', btns_selected);
 		console.log('btns_selected.at(cur_ind) : ', `${btns_selected.at(cur_ind)}`);
-		// document.getElementById(`${btns_selected.at(cur_ind)}`).style.background = '#5f9341';
-
-		// *** Can make a change answer button ***
+		
+		if (A_btn.at(cur_ind) == btns_selected.at(cur_ind)){
+			// Correct response
+			document.getElementById(`${btns_selected.at(cur_ind)}`).style.background = '#5f9341'; // green
+		} else {
+			// Incorrect response
+			document.getElementById(`${btns_selected.at(cur_ind)}`).style.background = '#eb5e5e'; // red
+		}
 	}
 }
 
@@ -257,8 +280,10 @@ async function processEvent(event) {
 	// ----------------------------------------------------
 	
 	// When the user clicks a button, save the value
-	const user_click_btn_id = this.getAttribute("id");
-	btns_selected.push(user_click_btn_id);
+	// const user_click_btn_id = this.getAttribute("id");
+	// btns_selected.push(user_click_btn_id);
+	// OR
+	btns_selected.push(this.getAttribute("id"));
 
 	// ----------------------------------------------------
 	
@@ -270,21 +295,29 @@ async function processEvent(event) {
 	// Evaluate if user_click matches the answer
 	
 	// Ensure no spaces
-	var user_click = document.getElementById(user_click_btn_id).textContent.split(' ').filter(NonEmptyVals_toKeep).join(' ');
-	A = A.split(' ').filter(NonEmptyVals_toKeep).join(' ');
-	
-	if (user_click == A) {
+	// var user_click = document.getElementById(user_click_btn_id).textContent.split(' ').filter(NonEmptyVals_toKeep).join(' ');
+	// A = A.split(' ').filter(NonEmptyVals_toKeep).join(' ');
+			
+	// if (user_click == A) {
+	// OR
+	if (A_btn.at(cur_ind) == btns_selected.at(cur_ind)){
 		document.getElementById("notification").innerHTML = "Correct.";
+		
+		// Correct response
+		document.getElementById(`${btns_selected.at(cur_ind)}`).style.background = '#5f9341'; // green
 		score += 1;
 	} else {
-		document.getElementById("notification").innerHTML = "Incorrect. Answer: " + A;
+		document.getElementById("notification").innerHTML = "Incorrect.";
+
+		// Incorrect response
+		document.getElementById(`${btns_selected.at(cur_ind)}`).style.background = '#eb5e5e'; // red
 	}
 	var etime = await elapsedTime(startTime, endTime)
 	document.getElementById("notification").innerHTML += "\nResponse Time: " + etime;
 	document.getElementById("notification").innerHTML += "\nTotal score: " + score;
 	responseTime.push(etime);
 	
-	A = "";
+	// A = "";
 
   // ----------------------------------------------------
   
@@ -308,15 +341,15 @@ async function processEvent(event) {
 	
 // ----------------------------------------------------
 
-async function start_one_eventlister(val) {
-     	document.getElementById(`btn${val}`).addEventListener("click", processEvent, false);
-}
+// async function start_one_eventlister(val) {
+     	// document.getElementById(`btn${val}`).addEventListener("click", processEvent, false);
+// }
 
 // ----------------------------------------------------
 
-async function stop_one_eventlister(val) {
-     	document.getElementById(`btn${val}`).removeEventListener("click", processEvent, false);
-}
+// async function stop_one_eventlister(val) {
+     	// document.getElementById(`btn${val}`).removeEventListener("click", processEvent, false);
+// }
 
 // -------------------------------------------------
 
