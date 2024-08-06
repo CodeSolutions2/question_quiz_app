@@ -66,7 +66,8 @@ const branchName = "main";
 const NonEmptyVals_toKeep = (x) => x.length != 0;
 
 var score = 0;
-var num_of_btns = 0;
+var num_of_btns = 0;  // Number of buttons
+var num_of_q = 0;     // Number of questions
 var responseTime = [];
 var btns_selected = [];
 var A_btn = [];
@@ -85,6 +86,7 @@ async function Start() {
 	// Initialize variables
 	score = 0;
 	num_of_btns = 0;
+	num_of_q = 0;
 	responseTime = [];
 	btns_selected = [];
 	A_btn = [];
@@ -143,8 +145,9 @@ async function Start() {
 		.then(async function(file_arr) {
 			// Test global variable scope: reassign file_array
 			file_array = file_arr;
-			
-			var num_of_q = file_array.length;
+
+			// Test global variable scope: reassign num_of_q
+			num_of_q = file_array.length;
 			
 			// Update user about the total number of questions
 			document.getElementById("label_for_quiz_completion").innerHTML = `Quiz completion (${num_of_q} questions):`;
@@ -233,13 +236,14 @@ async function Restart() {
 						
 async function load_a_test(q_num) {
 
-	console.log('q_num: ', q_num);
+	// console.log('q_num: ', q_num);
 	
 	// Display text on buttons
-	console.log('file_array: ', file_array);
+	// console.log('file_array: ', file_array);
 
-	console.log('file_array[q_num] : ', file_array[q_num]);
-	console.log('file_array.at(q_num) : ', file_array.at(q_num));
+	// console.log('file_array[q_num] : ', file_array[q_num]);
+	// OR
+	// console.log('file_array.at(q_num) : ', file_array.at(q_num));
 	
 	var filename = file_array.at(q_num).name;
 	console.log('filename: ', filename);
