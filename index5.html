@@ -68,41 +68,46 @@ const NonEmptyVals_toKeep = (x) => x.length != 0;
 var file_array = [];
 var count = 0;
 var cur_ind = 0;
-
+var x_rand = [];
 	
 // ----------------------------------------------------
 
 async function Start() {
-  
-  // Initialize variables
+
+	// ---------------------------
+	
+	// Initialize variables
 	var score = 0;
 	var num_of_btns = 0;
 	var responseTime = [];
 	var btns_selected = [];
 	var A_btn = [];
-
-  file_array = [];
-  count = 0;
+	
+	file_array = [];
+	count = 0;
 	cur_ind = 0;
+	x_rand = [];
+	
 	foldername = document.getElementById("quiz_app_folderORurl").value;
 
+	// ---------------------------
+	
 	// Start button is removed
 	document.getElementById("Start").style.display = "none";
 
 	// input area is removed
 	document.getElementById("quiz_app_folderORurl").style.display = "none";
-
+	
 	// Progress bar and buttons appear
 	document.getElementById("label_for_quiz_completion").style.display = "block";
 	document.getElementById("completion").style.display = "block";
-
+	
 	document.getElementById("btn0").style.display = "block";
 	document.getElementById("btn1").style.display = "block";
 	document.getElementById("btn2").style.display = "block";
 	document.getElementById("btn3").style.display = "block";
 
-
-// ---------------------------
+	// ---------------------------
   
 	// Initially load the questions from the repository
 	// var file_array = await GET_fileobjects_for_a_folder(repoOwner, repo_name, foldername, branchName);
@@ -121,26 +126,38 @@ async function Start() {
 
 	// Show the first question
 	// await load_a_test(x_rand.at(count));
-  
-// ---------------------------
-  
-  // OR
-  
-// ---------------------------
-  
-  await GET_fileobjects_for_a_folder(repoOwner, repo_name, foldername, branchName)
-  .then(async function(file_array) {
-      var num_of_q = file_array.length;
-    
-    // Update user about the total number of questions
-    document.getElementById("label_for_quiz_completion").innerHTML = `Quiz completion (${num_of_q} questions):`;
-
-	return await Array.from({ length: num_of_q }, (_, ind) => ind);
-  })
-  .then(async function(x) { return await rand_perm(x); })
-  .then(async function(x_rand) { await load_a_test(x_rand.at(count)); })
-
-// ---------------------------
+	
+	// ---------------------------
+	
+	// OR
+	
+	// ---------------------------
+	
+	await GET_fileobjects_for_a_folder(repoOwner, repo_name, foldername, branchName)
+		.then(async function(file_arr) {
+			// Test global variable scope: reassign file_array
+			file_array = file_arr;
+			
+			var num_of_q = file_array.length;
+			
+			// Update user about the total number of questions
+			document.getElementById("label_for_quiz_completion").innerHTML = `Quiz completion (${num_of_q} questions):`;
+			var x = await Array.from({ length: num_of_q }, (_, ind) => ind);
+			console.log('x: ', x);
+			return x;
+		})
+		.then(async function(x) { 
+			// Test global variable scope: reassign x_rand
+			x_rand = await rand_perm(x);
+			console.log('x_rand: ', x_rand);
+			return x_rand;
+		})
+		.then(async function(x_rand) { 
+			// Test global variable scope: count
+			await load_a_test(x_rand.at(count)); 
+		})
+	
+	// ---------------------------
   
 }
 
@@ -174,8 +191,9 @@ async function Previous() {
 		document.getElementById("Restart").style.display = "none";
 		document.getElementById("Next").style.display = "block";
 	}
-	
-	document.getElementById(`${btns_selected.at(cur_ind)}`).style.background = '#d4d4d4'; // Reset button color
+
+	// Reset button color
+	document.getElementById(`${btns_selected.at(cur_ind)}`).style.background = '#d4d4d4'; // gray
 	document.getElementById(`${A_btn.at(cur_ind)}`).style.background = '#d4d4d4'; // gray
 	
 	cur_ind = cur_ind - 1;
@@ -185,18 +203,8 @@ async function Previous() {
 // ----------------------------------------------------
 
 async function Restart() {
-
-	// Reinitialize variables
-  var score = 0;
-	var num_of_btns = 0;
-	var responseTime = [];
-	var btns_selected = [];
-	var A_btn = [];
-
-  file_array = [];
-  count = 0;
-	cur_ind = 0;
-	foldername = "";
+	
+	// ---------------------------
 
 	// Reinitialize usage buttons
 	document.getElementById("Start").style.display = "block";
@@ -215,10 +223,6 @@ async function Restart() {
 
 	document.getElementById("Q").innerHTML = "";
 	document.getElementById("notification").innerHTML = "";
-
-	// Reinitialize default screen
-	var initial_btn_list = ["Question 0", "Question 1", "Question 2", "Question 3"];
-	initial_btn_list.map((x, ind) => { document.getElementById(`btn${ind}`).innerText = x; return ''; });
 }
 	
 // ----------------------------------------------------
@@ -234,7 +238,7 @@ async function load_a_test(q_num) {
 	console.log('file_array.at(q_num) : ', file_array.at(q_num));
 	
 	var filename = file_array.at(q_num).name;
-  console.log('filename: ', filename);
+	console.log('filename: ', filename);
 	
 	var text = await GET_repo_file_info_RESTAPI_fast(repoOwner, repo_name, branchName, foldername, filename);
 	// console.log('text: ', text);
