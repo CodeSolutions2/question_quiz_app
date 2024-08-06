@@ -112,8 +112,16 @@ async function Start() {
 	if (github_OR_cloudStorage == true) {
 		// Cloud storage
 		const url = user_input;
-		file_array = await fetch_on_cloud_storage_return_contents_list(url);
-		console.log('file_array: ', file_array);
+		const xmlDocument = await fetch_on_cloud_storage_return_contents_list(url);
+		console.log('xmlDocument: ', xmlDocument);
+		
+		var filenames = xmlDocument.getElementsByTagName("Key");
+		console.log('filenames: ', filenames);
+
+		// OR
+		// children.0:<ListBucketResult>.children.4:<Contents>.textContent
+		var filenames1 = xmlDocument.children[0].children[4].textContent
+		console.log('filenames1: ', filenames1);
 		
 	} else {
 		// GitHub folder
@@ -490,8 +498,8 @@ async function fetch_on_cloud_storage_return_contents_list(url) {
 		type : 'GET',
 		async: true,
 		crossDomain: true,
-		xhrFields: {responseType: 'text'},
-		dataType: 'text',
+		// xhrFields: {responseType: 'text'},
+		// dataType: 'text',
 		beforeSend: function(xhr) { xhr.withCredentials = true; },
 		// headers: new Headers(headers_final),
 		success: function(response) { console.log('Success'); },
