@@ -58,13 +58,16 @@ window.addEventListener('beforeunload', function() {
 	
 // ----------------------------------------------------
 
+// Static variables
 const repo_name = "question_quiz_app";
 const repoOwner = "CodeSolutions2";
-var foldername;
 const branchName = "main";
 
 const NonEmptyVals_toKeep = (x) => x.length != 0;
 
+// ----------------------------------------------------
+
+// Variables that change for each question and test
 var score = 0;
 var num_of_btns = 0;  // Number of buttons
 var num_of_q = 0;     // Number of questions
@@ -76,6 +79,8 @@ var file_array = [];
 var count = 0;
 var cur_ind = 0;
 var x_rand = [];
+
+var foldername;
 	
 // ----------------------------------------------------
 
