@@ -120,14 +120,9 @@ async function Start() {
 
 		var filenames = [];
 		for (var i=0; i<HTMLCollection.length; i++) {
-			filenames.push(HTMLCollection.at(i).textContent);
+			filenames.push(HTMLCollection[i].textContent);
 		}
 		console.log('filenames: ', filenames);
-
-		// OR
-		// children.0:<ListBucketResult>.children.4:<Contents>.textContent
-		var filenames1 = xmlDocument.children[0].children[4].textContent
-		console.log('filenames1: ', filenames1);
 		
 	} else {
 		// GitHub folder
