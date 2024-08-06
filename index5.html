@@ -60,6 +60,7 @@ window.addEventListener('beforeunload', function() {
 
 const repo_name = "question_quiz_app";
 const repoOwner = "CodeSolutions2";
+var foldername;
 const branchName = "main";
 
 const NonEmptyVals_toKeep = (x) => x.length != 0;
@@ -68,22 +69,22 @@ var file_array = [];
 var count = 0;
 var cur_ind = 0;
 
-var foldername;
 	
 // ----------------------------------------------------
 
 async function Start() {
   
   // Initialize variables
-	var A = "";
 	var score = 0;
 	var num_of_btns = 0;
-	var count = 0;
-	var cur_ind = 0;
 	var responseTime = [];
 	var btns_selected = [];
 	var A_btn = [];
-	var foldername = document.getElementById("quiz_app_folderORurl").value;
+
+  file_array = [];
+  count = 0;
+	cur_ind = 0;
+	foldername = document.getElementById("quiz_app_folderORurl").value;
 
 	// Start button is removed
 	document.getElementById("Start").style.display = "none";
@@ -136,13 +137,8 @@ async function Start() {
 
 	return await Array.from({ length: num_of_q }, (_, ind) => ind);
   })
-  .then(async function(x) {
-    return await rand_perm(x);
-  })
-  .then(async function(x_rand) {
-    // Show the first question
-	await load_a_test(x_rand.at(count));
-  })
+  .then(async function(x) { return await rand_perm(x); })
+  .then(async function(x_rand) { await load_a_test(x_rand.at(count)); })
 
 // ---------------------------
   
@@ -191,18 +187,16 @@ async function Previous() {
 async function Restart() {
 
 	// Reinitialize variables
-	var file_array = {};
-	var A = "";
-	var score = 0;
-	var num_of_q = 0;
+  var score = 0;
 	var num_of_btns = 0;
-	var x_rand = [];
-	var count = 0;
-	var cur_ind = 0;
 	var responseTime = [];
 	var btns_selected = [];
 	var A_btn = [];
-	var foldername = "";
+
+  file_array = [];
+  count = 0;
+	cur_ind = 0;
+	foldername = "";
 
 	// Reinitialize usage buttons
 	document.getElementById("Start").style.display = "block";
@@ -239,9 +233,8 @@ async function load_a_test(q_num) {
 	console.log('file_array[q_num] : ', file_array[q_num]);
 	console.log('file_array.at(q_num) : ', file_array.at(q_num));
 	
-	// var object_name = 
-	
 	var filename = file_array.at(q_num).name;
+  console.log('filename: ', filename);
 	
 	var text = await GET_repo_file_info_RESTAPI_fast(repoOwner, repo_name, branchName, foldername, filename);
 	// console.log('text: ', text);
@@ -255,7 +248,7 @@ async function load_a_test(q_num) {
 
 	num_of_btns = QandA_list.length - 1; // it is minus 1 to account for the A at the end
 	
-	A = QandA_list.map((x, ind) => {
+	var A = QandA_list.map((x, ind) => {
 		// console.log('ind: ', ind);
 		if (ind < num_of_btns) {
 			document.getElementById(`btn${ind}`).innerText = x;
