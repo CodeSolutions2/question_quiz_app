@@ -6,7 +6,7 @@
 
 <h1>Question Quiz Webapp</h1>
 <ul>
-  <li>Enter the folder or url of the test questions in the input (ie: Q_Git, Q_Azure, https://storage.googleapis.com/question-quiz-storage/).</li>
+  <li>Enter the folder or url of the test questions in the input (ie: Q_Git, Q_Azure, https://storage.googleapis.com/question-quiz-storage).</li>
   <li>Click on the Start button to begin the test.</li>
 </ul>
 
@@ -115,7 +115,13 @@ async function Start() {
 		const xmlDocument = await fetch_on_cloud_storage_return_contents_list(url);
 		console.log('xmlDocument: ', xmlDocument);
 		
-		var filenames = xmlDocument.getElementsByTagName("Key");
+		var HTMLCollection = xmlDocument.getElementsByTagName("Key");
+		console.log('HTMLCollection: ', HTMLCollection);
+
+		var filenames = [];
+		for (var i=0; i<HTMLCollection.length; i++) {
+			filenames.push(HTMLCollection.at(i).textContent);
+		}
 		console.log('filenames: ', filenames);
 
 		// OR
