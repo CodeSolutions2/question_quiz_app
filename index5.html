@@ -81,6 +81,7 @@ var file_array = [];
 var count = 0;
 var cur_ind = 0;
 var x_rand = [];
+var github_OR_cloudStorage = "";
 
 var foldername;
 	
@@ -108,21 +109,44 @@ async function Start() {
 	// Determine if contents is from GitHub or Cloud Storage
 	var user_input = document.getElementById("quiz_app_folderORurl").value;
 
-	var github_OR_cloudStorage = (/https|http/i).test(user_input);
+	github_OR_cloudStorage = (/https|http/i).test(user_input);
+	
 	if (github_OR_cloudStorage == true) {
 		// Cloud storage
 		const url = user_input;
-		const xmlDocument = await fetch_on_cloud_storage_return_contents_list(url);
-		console.log('xmlDocument: ', xmlDocument);
+		await fetch_on_cloud_storage_return_contents_list(url)
+			.then(async function(xmlDocument) {
+				console.log('xmlDocument: ', xmlDocument);
 		
-		var HTMLCollection = xmlDocument.getElementsByTagName("Key");
-		console.log('HTMLCollection: ', HTMLCollection);
+				var HTMLCollection = xmlDocument.getElementsByTagName("Key");
+				console.log('HTMLCollection: ', HTMLCollection);
 
-		var filenames = [];
-		for (var i=0; i<HTMLCollection.length; i++) {
-			filenames.push(HTMLCollection[i].textContent);
-		}
-		console.log('filenames: ', filenames);
+				// Test global variable scope: reassign file_array
+				file_array = [];
+				for (var i=0; i<HTMLCollection.length; i++) {
+					file_array.push(HTMLCollection[i].textContent);
+				}
+				console.log('file_array: ', file_array);
+
+				// Test global variable scope: reassign num_of_q
+				num_of_q = file_array.length;
+				
+				// Update user about the total number of questions
+				document.getElementById("label_for_quiz_completion").innerHTML = `Quiz completion (${num_of_q} questions):`;
+				var x = await Array.from({ length: num_of_q }, (_, ind) => ind);
+				console.log('x: ', x);
+				return x;
+			})
+			.then(async function(x) { 
+				// Test global variable scope: reassign x_rand
+				x_rand = await rand_perm(x);
+				console.log('x_rand: ', x_rand);
+				return x_rand;
+			})
+			.then(async function(x_rand) { 
+				// Test global variable scope: count
+				await load_a_test(x_rand.at(count)); 
+			})
 		
 	} else {
 		// GitHub folder
@@ -252,12 +276,21 @@ async function load_a_test(q_num) {
 	// console.log('file_array[q_num] : ', file_array[q_num]);
 	// OR
 	// console.log('file_array.at(q_num) : ', file_array.at(q_num));
-	
-	var filename = file_array.at(q_num).name;
-	console.log('filename: ', filename);
-	
-	var text = await GET_repo_file_info_RESTAPI_fast(repoOwner, repo_name, branchName, foldername, filename);
-	// console.log('text: ', text);
+
+	if (github_OR_cloudStorage == false) {
+		var filename = file_array.at(q_num).name;
+		console.log('filename: ', filename);
+		
+		var text = await GET_repo_file_info_RESTAPI_fast(repoOwner, repo_name, branchName, foldername, filename);
+		// console.log('text: ', text);
+		
+	} else {
+		var filename = file_array.at(q_num);
+		console.log('filename: ', filename);
+		
+		var text = await fetch_file_from_cloud_storage(`https://storage.googleapis.com/question-quiz-storage/${filename}`);
+		// console.log('text: ', text);
+	}
 	
 	var QandA_list = text.split('\n').filter(NonEmptyVals_toKeep);
 	// console.log('QandA_list: ', QandA_list);
@@ -493,16 +526,13 @@ async function elapsedTime(startTime, endTime) {
 
 async function fetch_on_cloud_storage_return_contents_list(url) {
 
-	// Example url of a Cloud Storage folder: https://storage.googleapis.com/question-quiz-storage/
+	// Example url of a Cloud Storage folder: https://storage.googleapis.com/question-quiz-storage
 
 	var settings = {
 		type : 'GET',
 		async: true,
 		crossDomain: true,
-		// xhrFields: {responseType: 'text'},
-		// dataType: 'text',
 		beforeSend: function(xhr) { xhr.withCredentials = true; },
-		// headers: new Headers(headers_final),
 		success: function(response) { console.log('Success'); },
 		error: function(xhr, status, error) { console.log('Error:', error); }
 	};
