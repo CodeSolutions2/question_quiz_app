@@ -65,6 +65,12 @@ const branchName = "main";
 
 const NonEmptyVals_toKeep = (x) => x.length != 0;
 
+var score = 0;
+var num_of_btns = 0;
+var responseTime = [];
+var btns_selected = [];
+var A_btn = [];
+	
 var file_array = [];
 var count = 0;
 var cur_ind = 0;
@@ -77,11 +83,11 @@ async function Start() {
 	// ---------------------------
 	
 	// Initialize variables
-	var score = 0;
-	var num_of_btns = 0;
-	var responseTime = [];
-	var btns_selected = [];
-	var A_btn = [];
+	score = 0;
+	num_of_btns = 0;
+	responseTime = [];
+	btns_selected = [];
+	A_btn = [];
 	
 	file_array = [];
 	count = 0;
@@ -203,8 +209,6 @@ async function Previous() {
 // ----------------------------------------------------
 
 async function Restart() {
-	
-	// ---------------------------
 
 	// Reinitialize usage buttons
 	document.getElementById("Start").style.display = "block";
@@ -271,6 +275,7 @@ async function load_a_test(q_num) {
 	// Make a response
 	console.log('count: ', count);
 	console.log('cur_ind: ', cur_ind);
+	
 	if (cur_ind == count && cur_ind == A_btn.length) {
 		// Save the correct Answer to the Answer list
 		for (var i=0; i < num_of_btns; i++) {
@@ -422,6 +427,8 @@ async function processEvent(event) {
 		document.getElementById("Previous").style.display = "block";
 		document.getElementById("Restart").style.display = "block";
 	}
+
+	// ----------------------------------------------------
 	
 }
 	
