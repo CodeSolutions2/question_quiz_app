@@ -230,6 +230,10 @@ async function Restart() {
 
 	document.getElementById("Q").innerHTML = "";
 	document.getElementById("notification").innerHTML = "";
+
+	// Reset button color
+	document.getElementById(`${btns_selected.at(cur_ind)}`).style.background = '#d4d4d4'; // gray
+	document.getElementById(`${A_btn.at(cur_ind)}`).style.background = '#d4d4d4'; // gray
 }
 	
 // ----------------------------------------------------
