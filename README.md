@@ -11,24 +11,10 @@ The objective of this work was to create a Computer or web application that can 
 ## Version 1: JavaScript (Try it!)
 
 Enter a Public Google Cloud Platform Storage Bucket with text files in the following order:
-
-text0.txt
-Question 
-- 1. multiple choice answer 1
-- 2. multiple choice answer 2
-- 3. multiple choice answer 3
-- 4. multiple choice answer 4
-- 2. multiple choice answer 2 (Copy-paste of one of the four multiple choice answers that is the answer)
+![alt_text](instruction_questionQuiz_textfile.png)
 
 And example text.txt file is:
-
-text0.txt
-How can you check your current git version? 
-- 1. git –v
-- 1. git --version
-- 3. git –option
-- 4. git –current
-- 2. git --version
+![alt_text](example_questionQuiz_textfile.png)
 
 
 [question_quiz_app] https://codesolutions2.github.io/question_quiz_app/index5.html
