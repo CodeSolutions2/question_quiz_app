@@ -13,7 +13,8 @@ The objective of this work was to create a Computer or web application that can 
 Enter a Public Google Cloud Platform Storage Bucket with text files in the following order:
 ![instructions](instruction_questionQuiz_textfile.png)
 
-And example text.txt file is:\n
+And example text.txt file is:
+
 ![example](example_questionquiz_textfile.png)
 
 
