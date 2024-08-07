@@ -13,12 +13,12 @@ The objective of this work was to create a Computer or web application that can 
 Enter a Public Google Cloud Platform Storage Bucket with text files in the following order:
 
 text0.txt
-Question?
+Question 
 1. multiple choice answer 1
-1. multiple choice answer 2
+2. multiple choice answer 2
 3. multiple choice answer 3
 4. multiple choice answer 4
-Copy-paste of one of the four multiple choice answers that is the answer
+2. multiple choice answer 2 (Copy-paste of one of the four multiple choice answers that is the answer)
 
 And example text.txt file is:
 
