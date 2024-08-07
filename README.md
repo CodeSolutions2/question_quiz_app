@@ -17,5 +17,6 @@ And example text.txt file is:
 
 ![example](example_questionquiz_textfile.png)
 
+The question_quiz_app will randomly order the text files in the Google Cloud Platform Storage Bucket, and present each question to the user one at a time. Happy Practicing!
 
 [question_quiz_app] https://codesolutions2.github.io/question_quiz_app/index5.html
