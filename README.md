@@ -14,21 +14,21 @@ Enter a Public Google Cloud Platform Storage Bucket with text files in the follo
 
 text0.txt
 Question 
-1. multiple choice answer 1
-2. multiple choice answer 2
-3. multiple choice answer 3
-4. multiple choice answer 4
-2. multiple choice answer 2 (Copy-paste of one of the four multiple choice answers that is the answer)
+- 1. multiple choice answer 1
+- 2. multiple choice answer 2
+- 3. multiple choice answer 3
+- 4. multiple choice answer 4
+- 2. multiple choice answer 2 (Copy-paste of one of the four multiple choice answers that is the answer)
 
 And example text.txt file is:
 
 text0.txt
 How can you check your current git version? 
-1. git –v
-1. git --version
-3. git –option
-4. git –current
-2. git --version
+- 1. git –v
+- 1. git --version
+- 3. git –option
+- 4. git –current
+- 2. git --version
 
 
 [question_quiz_app] https://codesolutions2.github.io/question_quiz_app/index5.html
