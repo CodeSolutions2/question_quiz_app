@@ -11,10 +11,10 @@ The objective of this work was to create a Computer or web application that can 
 ## Version 1: JavaScript (Try it!)
 
 Enter a Public Google Cloud Platform Storage Bucket with text files in the following order:
-![alt_text](instruction_questionQuiz_textfile.png)
+![instructions](instruction_questionQuiz_textfile.png)
 
 And example text.txt file is:
-![alt_text](example_questionQuiz_textfile.png)
+![example](example_questionquiz_textfile.png)
 
 
 [question_quiz_app] https://codesolutions2.github.io/question_quiz_app/index5.html
