@@ -6,11 +6,11 @@
 
 <h1>Question Quiz Webapp</h1>
 <ul>
-  <li>Enter the url of the test questions in the input field (ie: https://storage.googleapis.com/question-quiz-storage).</li>
+  <li>Enter the folder or url of the test questions in the input (ie: Q_Git, https://storage.googleapis.com/question-quiz-storage).</li>
   <li>Click on the Start button to begin the test.</li>
 </ul>
 
-<input type="text" name="" id="quiz_app_url" value="" placeholder="Quiz app storage url" style="display:block; width: 600px;">
+<input type="text" name="" id="quiz_app_folderORurl" value="" placeholder="Q_Git" style="display:block; width: 600px;">
   
   <label for="file" id="label_for_quiz_completion" style="display:none">Quiz completion:</label><progress id="completion" max="100" value="0" style="display:none">0%</progress>
   
@@ -112,7 +112,7 @@ async function Start() {
 	// ---------------------------
 
 	// Determine if contents is from GitHub or Cloud Storage
-	var user_input = document.getElementById("quiz_app_url").value;
+	var user_input = document.getElementById("quiz_app_folderORurl").value;
 
 	github_OR_cloudStorage = (/https|http/i).test(user_input);
 	
@@ -188,7 +188,7 @@ async function Start() {
 	document.getElementById("Start").style.display = "none";
 
 	// input area is removed
-	document.getElementById("quiz_app_url").style.display = "none";
+	document.getElementById("quiz_app_folderORurl").style.display = "none";
 	
 	// Progress bar and buttons appear
 	document.getElementById("label_for_quiz_completion").style.display = "block";
@@ -252,7 +252,7 @@ async function Restart() {
 	document.getElementById("Previous").style.display = "none";
 	document.getElementById("Restart").style.display = "none";
 
-	document.getElementById("quiz_app_url").style.display = "block";
+	document.getElementById("quiz_app_folderORurl").style.display = "block";
 	document.getElementById("label_for_quiz_completion").style.display = "none";
 	document.getElementById("completion").style.display = "none";
 
