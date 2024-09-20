@@ -1,6 +1,0 @@
-Which of the following are valid discrete distributions from which you can select discrete values for discrete hyperparameters.
-qloguniform, qlognormal, qnormal, quniform
-quniform
-qbasic
-qlogbasic
-qloguniform, qlognormal, qnormal, quniform
